@@ -2,6 +2,7 @@
 Hosted at: https://recoveryware.sawbay.net
 
 Recovery Ware that serves a browser-only tool to encrypt or decrypt sensitive text using PBKDF2 + AES-GCM, plus Web NFC helpers for Android devices*.
+
 (*) For iPhone devices, please use **NFC Tools** to write encrypted data.
 
 ## Features
