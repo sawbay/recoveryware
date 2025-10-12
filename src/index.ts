@@ -1,4 +1,4 @@
-import html from "./index.html?raw";
+import html from "./index.html";
 
 export default {
 	async fetch(request): Promise<Response> {
