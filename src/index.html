@@ -109,8 +109,8 @@
           <textarea id="plaintext" rows="6" placeholder="Enter plaintext seed or other secret..."></textarea>
         </label>
         <div class="controls">
-          <button id="encrypt-btn">Encrypt →</button>
-          <button id="read-nfc-btn">Read from NFC</button>
+          <button id="encrypt-btn">Encrypt</button>
+          <button id="decrypt-btn">Decrypt</button>
         </div>
 
         <label>
@@ -118,9 +118,9 @@
           <textarea id="ciphertext" rows="10" placeholder='{"version":1,"kdf":"PBKDF2",...}'></textarea>
         </label>
         <div class="controls">
-          <button id="decrypt-btn">Decrypt →</button>
-          <button id="copy-ciphertext-btn">Copy</button>
+          <button id="read-nfc-btn">Read from NFC</button>
           <button id="write-nfc-btn">Write to NFC</button>
+          <button id="copy-ciphertext-btn">Copy</button>
         </div>
 
         <p id="status" role="status" aria-live="polite"></p>
