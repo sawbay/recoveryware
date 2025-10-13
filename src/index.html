@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -14,131 +13,494 @@
       :root {
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         color: #1f2933;
-        background-color: #f8fafc;
+        background-color: #f1f5f9;
+        line-height: 1.5;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
       }
       body {
         margin: 0;
-        padding: 0 1.5rem 3rem;
-        max-width: 960px;
-        margin-inline: auto;
+        padding: clamp(1.5rem, 5vw, 3rem);
+        min-height: 100vh;
+        background: #f1f5f9;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
       }
-      header,
-      footer {
+      .shell {
+        width: min(100%, 720px);
+        display: grid;
+        gap: clamp(1.5rem, 4vw, 2.5rem);
+      }
+      header {
         text-align: center;
-        margin: 2rem 0;
+        display: grid;
+        gap: 0.75rem;
+      }
+      header h1 {
+        margin: 0;
+        font-size: clamp(2rem, 5vw, 2.5rem);
+      }
+      header p {
+        margin: 0;
+        color: #475569;
       }
       main {
         display: grid;
-        gap: 1.5rem;
+        gap: 1.75rem;
+        flex: 1 0 auto;
       }
       .panel {
         background: white;
-        border-radius: 12px;
+        border-radius: 18px;
         padding: 1.5rem;
-        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+        box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
         display: grid;
-        gap: 1rem;
+        gap: 1.1rem;
+      }
+      @media (min-width: 768px) {
+        .panel {
+          padding: 2rem;
+        }
+      }
+      .section-header {
+        display: grid;
+        gap: 0.3rem;
+      }
+      .section-header h2 {
+        margin: 0;
+        font-size: 1.55rem;
+      }
+      .section-header p {
+        margin: 0;
+        color: #4b5563;
+        font-size: 0.95rem;
+        line-height: 1.4;
       }
       label {
         display: grid;
         gap: 0.5rem;
         font-weight: 600;
+        color: inherit;
       }
       input[type="password"],
       input[type="number"],
       textarea {
-        padding: 0.65rem 0.75rem;
-        border-radius: 8px;
+        width: 100%;
+        padding: 0.65rem 0.8rem;
+        border-radius: 10px;
         border: 1px solid #cbd5f5;
         font: inherit;
+        background: white;
+        color: inherit;
+      }
+      textarea {
         resize: vertical;
+        min-height: 8rem;
       }
       textarea[readonly] {
-        background: #f1f5f9;
+        background: #f8fafc;
+      }
+      input[type="number"] {
+        appearance: textfield;
+      }
+      input[type="number"]::-webkit-outer-spin-button,
+      input[type="number"]::-webkit-inner-spin-button {
+        margin: 0;
+        appearance: none;
+      }
+      .helper-text {
+        margin: 0;
+        color: #6b7280;
+        font-size: 0.9rem;
       }
       .controls {
         display: flex;
         flex-wrap: wrap;
         gap: 0.75rem;
       }
-      button {
+      .action-btn {
         background: #2563eb;
         color: white;
         border: none;
-        border-radius: 8px;
-        padding: 0.6rem 1.2rem;
+        border-radius: 10px;
+        padding: 0.6rem 1.3rem;
         font-weight: 600;
         cursor: pointer;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
       }
-      button:hover {
+      .action-btn:hover:not(:disabled),
+      .action-btn:focus-visible:not(:disabled) {
         transform: translateY(-1px);
-        box-shadow: 0 6px 12px rgba(37, 99, 235, 0.2);
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
+        outline: none;
       }
-      button:disabled {
+      .action-btn:disabled {
         background: #94a3b8;
+        color: #e2e8f0;
         cursor: not-allowed;
         box-shadow: none;
+        transform: none;
+      }
+      .action-btn.secondary {
+        background: #e0e7ff;
+        color: #1e3a8a;
+      }
+      .action-btn.secondary:hover:not(:disabled),
+      .action-btn.secondary:focus-visible:not(:disabled) {
+        background: #c7d2fe;
+        box-shadow: none;
+      }
+      .pager {
+        display: grid;
+        gap: 1.5rem;
+        overflow: hidden;
+      }
+      .pages {
+        display: flex;
+        width: 100%;
+        transition: transform 0.35s ease;
+        will-change: transform;
+        touch-action: pan-y;
+      }
+      .page {
+        min-width: 100%;
+        flex: 0 0 100%;
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+      .page--current {
+        opacity: 1;
+      }
+      .pager-dots {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .pager-dot {
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 999px;
+        background: #cbd5f5;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+      .pager-dot:hover,
+      .pager-dot:focus-visible {
+        background: #94a3f5;
+        transform: scale(1.1);
+        outline: none;
+      }
+      .pager-dot--current {
+        background: #2563eb;
+        transform: scale(1.2);
+      }
+      .stepper {
+        display: grid;
+        gap: 1rem;
+      }
+      .step-toolbar {
+        display: flex;
+        align-items: flex-end;
+        gap: 1rem;
+      }
+      .step-toolbar [data-step-prev],
+      .step-toolbar [data-step-next] {
+        flex-shrink: 0;
+      }
+      .step-toolbar [data-step-next] {
+        margin-left: auto;
+      }
+      .step-title {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.2rem;
+        text-align: center;
+      }
+      .step-title-position {
+        font-size: 0.85rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .step-title-name {
+        font-weight: 600;
+        font-size: 1.05rem;
+        color: #1f2937;
+      }
+      @media (min-width: 640px) {
+        .step-title {
+          text-align: left;
+          align-items: flex-start;
+        }
+      }
+      .step-panels {
+        position: relative;
+      }
+      .step-panel {
+        display: none;
+        gap: 1rem;
+        align-content: start;
+      }
+      .step-panel--active {
+        display: grid;
       }
       #status {
-        min-height: 1.5rem;
+        background: #e0e7ff;
+        border-radius: 14px;
+        padding: 0.9rem 1.2rem;
         font-weight: 600;
         color: #1d4ed8;
+        text-align: center;
+      }
+      footer {
+        text-align: center;
+        color: #64748b;
+        margin-bottom: 1rem;
       }
     </style>
   </head>
   <body>
-    <header>
-      <h1>Recovery Ware</h1>
-      <p>Encrypt or decrypt sensitive text with PBKDF2 + AES-GCM, then save or write it to an NFC tag.</p>
-    </header>
+    <div class="shell">
+      <header>
+        <h1>Recovery Ware</h1>
+        <p>Encrypt or decrypt sensitive text with PBKDF2 + AES-GCM, then save or write it to an NFC tag.</p>
+      </header>
 
-    <main>
-      <section class="panel">
-        <h2>Inputs</h2>
-        <label>
-          Passphrase
-          <input id="passphrase" type="password" autocomplete="new-password" />
-        </label>
-        <label>
-          Confirm Passphrase
-          <input id="passphrase-confirm" type="password" autocomplete="new-password" />
-        </label>
-        <label>
-          PBKDF2 Iterations (min 100000)
-          <input id="iterations" type="number" min="100000" value="600000" />
-        </label>
-
-        <label>
-          Plaintext (for encryption)
-          <textarea id="plaintext" rows="6" placeholder="Enter plaintext seed or other secret..."></textarea>
-        </label>
-        <div class="controls">
-          <button id="encrypt-btn">Encrypt</button>
-          <button id="decrypt-btn">Decrypt</button>
+      <main>
+      <div class="pager" aria-live="polite">
+        <div class="pager-dots" role="tablist" aria-label="Encrypt or decrypt pages">
+          <button
+            type="button"
+            class="pager-dot pager-dot--current"
+            data-page-target="0"
+            role="tab"
+            aria-controls="page-encrypt"
+            aria-selected="true"
+            tabindex="0"
+            title="Go to encrypt page"
+          ></button>
+          <button
+            type="button"
+            class="pager-dot"
+            data-page-target="1"
+            role="tab"
+            aria-controls="page-decrypt"
+            aria-selected="false"
+            tabindex="-1"
+            title="Go to decrypt page"
+          ></button>
         </div>
+        <div class="pages" id="pages" data-page-index="0">
+          <section
+            class="panel page page--current"
+            id="page-encrypt"
+            data-page="0"
+            aria-label="Encrypt"
+            aria-hidden="false"
+          >
+            <div class="section-header">
+              <h2>Encrypt</h2>
+            </div>
+            <div class="stepper" id="workflow-encrypt">
+              <div class="step-toolbar">
+                <button type="button" class="action-btn secondary" data-step-prev disabled>Back</button>
+                <div class="step-title">
+                  <span class="step-title-position" data-step-position>Step 1 of 4</span>
+                  <span class="step-title-name" data-step-name>Enter plain text</span>
+                </div>
+                <button type="button" class="action-btn" data-step-next>Next</button>
+              </div>
+              <div class="step-panels">
+                <section
+                  class="step-panel step-panel--active"
+                  id="encrypt-step-0"
+                  data-step-panel="0"
+                  data-step-name="Enter plain text"
+                  aria-hidden="false"
+                >
+                  <label>
+                    Plaintext
+                    <textarea
+                      id="encrypt-plaintext"
+                      rows="6"
+                      placeholder="Enter plaintext seed or other secret..."
+                    ></textarea>
+                  </label>
+                </section>
 
-        <label>
-          Encrypted blob JSON (for decrypting or writing to NFC)
-          <textarea id="ciphertext" rows="10" placeholder='{"version":1,"kdf":"PBKDF2",...}'></textarea>
-        </label>
-        <div class="controls">
-          <button id="read-nfc-btn">Read from NFC</button>
-          <button id="write-nfc-btn">Write to NFC</button>
-          <button id="copy-ciphertext-btn">Copy</button>
+                <section
+                  class="step-panel"
+                  id="encrypt-step-1"
+                  data-step-panel="1"
+                  data-step-name="Passphrase (optional)"
+                  hidden
+                  aria-hidden="true"
+                >
+                  <p class="helper-text">Add a passphrase for stronger protection or leave blank to rely on device security.</p>
+                  <label>
+                    Passphrase
+                    <input id="encrypt-passphrase" type="password" autocomplete="new-password" />
+                  </label>
+                  <label>
+                    Confirm passphrase
+                    <input id="encrypt-passphrase-confirm" type="password" autocomplete="new-password" />
+                  </label>
+                </section>
+
+                <section
+                  class="step-panel"
+                  id="encrypt-step-2"
+                  data-step-panel="2"
+                  data-step-name="Iterations"
+                  hidden
+                  aria-hidden="true"
+                >
+                  <label>
+                    PBKDF2 iterations
+                    <input
+                      id="iterations"
+                      type="number"
+                      min="100000"
+                      value="600000"
+                      inputmode="numeric"
+                    />
+                  </label>
+                  <p class="helper-text">Defaults to 600,000 iterations for a balanced KDF. Higher counts strengthen brute-force resistance at the cost of speed.</p>
+                  <div class="controls">
+                    <button id="encrypt-btn" type="button" class="action-btn">Encrypt</button>
+                  </div>
+                </section>
+
+                <section
+                  class="step-panel"
+                  id="encrypt-step-3"
+                  data-step-panel="3"
+                  data-step-name="Copy or write to NFC"
+                  hidden
+                  aria-hidden="true"
+                >
+                  <label>
+                    Encrypted blob JSON
+                    <textarea
+                      id="ciphertext-encrypt"
+                      rows="8"
+                      placeholder='{"version":1,"kdf":"PBKDF2",...}'
+                    ></textarea>
+                  </label>
+                  <div class="controls">
+                    <button id="copy-ciphertext-btn" type="button" class="action-btn secondary">
+                      Copy JSON
+                    </button>
+                    <button id="write-nfc-btn" type="button" class="action-btn secondary">
+                      Write to NFC
+                    </button>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel page" id="page-decrypt" data-page="1" aria-label="Decrypt" aria-hidden="true">
+            <div class="section-header">
+              <h2>Decrypt</h2>
+            </div>
+            <div class="stepper" id="workflow-decrypt">
+              <div class="step-toolbar">
+                <button type="button" class="action-btn secondary" data-step-prev disabled>Back</button>
+                <div class="step-title">
+                  <span class="step-title-position" data-step-position>Step 1 of 3</span>
+                  <span class="step-title-name" data-step-name>Load encrypted blob</span>
+                </div>
+                <button type="button" class="action-btn" data-step-next>Next</button>
+              </div>
+              <div class="step-panels">
+                <section
+                  class="step-panel step-panel--active"
+                  id="decrypt-step-0"
+                  data-step-panel="0"
+                  data-step-name="Load encrypted blob"
+                  aria-hidden="false"
+                >
+                  <label>
+                    Encrypted blob JSON
+                    <textarea
+                      id="ciphertext-decrypt"
+                      rows="8"
+                      placeholder='{"version":1,"kdf":"PBKDF2",...}'
+                    ></textarea>
+                  </label>
+                  <div class="controls">
+                    <button id="paste-ciphertext-btn" type="button" class="action-btn secondary">
+                      Paste from clipboard
+                    </button>
+                    <button id="read-nfc-btn" type="button" class="action-btn secondary">
+                      Read from NFC
+                    </button>
+                  </div>
+                </section>
+
+                <section
+                  class="step-panel"
+                  id="decrypt-step-1"
+                  data-step-panel="1"
+                  data-step-name="Passphrase (if any)"
+                  hidden
+                  aria-hidden="true"
+                >
+                  <label>
+                    Passphrase
+                    <input id="decrypt-passphrase" type="password" autocomplete="current-password" />
+                  </label>
+                  <div class="controls">
+                    <button id="decrypt-btn" type="button" class="action-btn">Decrypt</button>
+                  </div>
+                </section>
+
+                <section
+                  class="step-panel"
+                  id="decrypt-step-2"
+                  data-step-panel="2"
+                  data-step-name="Plain text"
+                  hidden
+                  aria-hidden="true"
+                >
+                  <label>
+                    Plain text
+                    <textarea
+                      id="decrypt-plaintext"
+                      rows="6"
+                      readonly
+                      placeholder="Plaintext will appear here after decrypting."
+                    ></textarea>
+                  </label>
+                </section>
+              </div>
+            </div>
+          </section>
         </div>
+      </div>
+      </main>
 
-        <p id="status" role="status" aria-live="polite"></p>
-      </section>
-    </main>
+      <div id="status" role="status" aria-live="polite">Ready.</div>
 
-    <footer>
-      <p>Data never leaves your browser. Ensure you wipe downloaded plaintext files after use.</p>
-    </footer>
+      <footer>
+        <p>Data never leaves your browser. Ensure you wipe downloaded plaintext files after use.</p>
+      </footer>
+    </div>
 
     <script type="module">
       const DEFAULT_ITERATIONS = 600_000;
       const MIN_ITERATIONS = 100_000;
+      const SWIPE_THRESHOLD = 50;
 
       function requireElement(id) {
         const el = document.getElementById(id);
@@ -146,25 +508,112 @@
         return el;
       }
 
+      function initWorkflow(id) {
+        const root = requireElement(id);
+        const panels = Array.from(root.querySelectorAll("[data-step-panel]"));
+        const toolbar = root.querySelector(".step-toolbar");
+        const nextButton = toolbar?.querySelector("[data-step-next]") || null;
+        const prevButton = toolbar?.querySelector("[data-step-prev]") || null;
+        const positionEl = toolbar?.querySelector("[data-step-position]") || null;
+        const nameEl = toolbar?.querySelector("[data-step-name]") || null;
+
+        let current = 0;
+        let maxVisited = 0;
+
+        function setStep(index, options = {}) {
+          const clamped = Math.max(0, Math.min(index, panels.length - 1));
+          if (!options.force && clamped > maxVisited + 1) {
+            return;
+          }
+          if (clamped > maxVisited) {
+            maxVisited = clamped;
+          }
+          current = clamped;
+          root.dataset.currentStep = String(current);
+
+          panels.forEach((panel, idx) => {
+            const active = idx === current;
+            panel.classList.toggle("step-panel--active", active);
+            panel.hidden = !active;
+            panel.setAttribute("aria-hidden", active ? "false" : "true");
+          });
+
+          if (positionEl) {
+            positionEl.textContent = `Step ${current + 1} of ${panels.length}`;
+          }
+          if (nameEl) {
+            nameEl.textContent = panels[current]?.dataset.stepName || "";
+          }
+          if (prevButton) {
+            prevButton.disabled = current === 0;
+          }
+          if (nextButton) {
+            nextButton.disabled = current >= panels.length - 1;
+          }
+        }
+
+        if (nextButton) {
+          nextButton.addEventListener("click", () => {
+            setStep(current + 1);
+          });
+        }
+
+        if (prevButton) {
+          prevButton.addEventListener("click", () => {
+            setStep(current - 1, { force: true });
+          });
+        }
+
+        setStep(0, { force: true });
+
+        return {
+          setStep,
+          get currentStep() {
+            return current;
+          },
+          get maxVisited() {
+            return maxVisited;
+          },
+        };
+      }
+
       window.addEventListener("DOMContentLoaded", () => {
         const elements = {
-          passphrase: requireElement("passphrase"),
-          passphraseConfirm: requireElement("passphrase-confirm"),
+          pages: requireElement("pages"),
+          encryptPassphrase: requireElement("encrypt-passphrase"),
+          encryptPassphraseConfirm: requireElement("encrypt-passphrase-confirm"),
+          decryptPassphrase: requireElement("decrypt-passphrase"),
           iterations: requireElement("iterations"),
-          plaintext: requireElement("plaintext"),
-          ciphertext: requireElement("ciphertext"),
+          encryptPlaintext: requireElement("encrypt-plaintext"),
+          ciphertextEncrypt: requireElement("ciphertext-encrypt"),
+          ciphertextDecrypt: requireElement("ciphertext-decrypt"),
+          decryptPlaintext: requireElement("decrypt-plaintext"),
           encryptBtn: requireElement("encrypt-btn"),
           decryptBtn: requireElement("decrypt-btn"),
           copyCiphertextBtn: requireElement("copy-ciphertext-btn"),
+          pasteCiphertextBtn: requireElement("paste-ciphertext-btn"),
           readNfcBtn: requireElement("read-nfc-btn"),
           writeNfcBtn: requireElement("write-nfc-btn"),
           status: requireElement("status"),
         };
 
+        const workflows = {
+          encrypt: initWorkflow("workflow-encrypt"),
+          decrypt: initWorkflow("workflow-decrypt"),
+        };
+
+        const pagePanels = Array.from(elements.pages.querySelectorAll(".page"));
+        const pageDots = Array.from(document.querySelectorAll("[data-page-target]"));
+        let currentPage = Number(elements.pages.dataset.pageIndex || "0");
+
         function setStatus(message, tone = "info") {
           elements.status.textContent = message;
-          elements.status.style.color =
+          const color =
             tone === "error" ? "#dc2626" : tone === "success" ? "#15803d" : "#1d4ed8";
+          const background =
+            tone === "error" ? "#fee2e2" : tone === "success" ? "#dcfce7" : "#e0e7ff";
+          elements.status.style.color = color;
+          elements.status.style.background = background;
         }
 
         function toBase64(u8) {
@@ -292,37 +741,162 @@
           return decodeUtf8(new Uint8Array(plaintextBytes));
         }
 
+        function setCiphertext(value) {
+          const normalized = value ?? "";
+          elements.ciphertextEncrypt.value = normalized;
+          elements.ciphertextDecrypt.value = normalized;
+        }
+
+        function syncCiphertext(source, target) {
+          source.addEventListener("input", () => {
+            if (target.value !== source.value) {
+              target.value = source.value;
+            }
+          });
+        }
+
+        syncCiphertext(elements.ciphertextEncrypt, elements.ciphertextDecrypt);
+        syncCiphertext(elements.ciphertextDecrypt, elements.ciphertextEncrypt);
+
         function getPassphraseForEncrypt() {
-          const pw = elements.passphrase.value;
-          const confirm = elements.passphraseConfirm.value;
-          if (!pw) throw new Error("Passphrase is required.");
-          if (pw.length < 4) throw new Error("Passphrase must be at least 4 characters.");
-          if (pw !== confirm) throw new Error("Passphrases do not match.");
+          const pw = elements.encryptPassphrase.value;
+          const confirm = elements.encryptPassphraseConfirm.value;
+
+          if (!pw && !confirm) {
+            return "";
+          }
+          if (!pw && confirm) {
+            throw new Error("Enter a passphrase to match the confirmation.");
+          }
+          if (pw && !confirm) {
+            throw new Error("Confirm the passphrase to continue.");
+          }
+          if (pw.length < 4) {
+            throw new Error("Passphrase must be at least 4 characters.");
+          }
+          if (pw !== confirm) {
+            throw new Error("Passphrases do not match.");
+          }
           return pw;
         }
 
         function getPassphraseForDecrypt() {
-          const pw = elements.passphrase.value;
-          const confirm = elements.passphraseConfirm.value;
-          if (!pw) throw new Error("Passphrase is required.");
-          if (confirm && confirm !== pw) {
-            throw new Error("Passphrase confirmation does not match.");
-          }
-          return pw;
+          return elements.decryptPassphrase.value;
         }
+
+        function setPage(index, options = {}) {
+          const clamped = Math.max(0, Math.min(pagePanels.length - 1, index));
+          currentPage = clamped;
+          elements.pages.style.transform = `translateX(${clamped * -100}%)`;
+          elements.pages.dataset.pageIndex = String(clamped);
+
+          pagePanels.forEach((panel, panelIndex) => {
+            const active = panelIndex === clamped;
+            panel.classList.toggle("page--current", active);
+            panel.setAttribute("aria-hidden", active ? "false" : "true");
+          });
+
+          pageDots.forEach((dot, dotIndex) => {
+            const active = dotIndex === clamped;
+            dot.classList.toggle("pager-dot--current", active);
+            dot.setAttribute("aria-selected", active ? "true" : "false");
+            dot.setAttribute("tabindex", active ? "0" : "-1");
+          });
+
+          if (options.focusDot) {
+            pageDots[clamped]?.focus();
+          }
+        }
+
+        pageDots.forEach((dot) => {
+          dot.addEventListener("click", () => {
+            const targetIndex = Number(dot.dataset.pageTarget || "0");
+            setPage(targetIndex);
+          });
+          dot.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowRight") {
+              event.preventDefault();
+              setPage(currentPage + 1, { focusDot: true });
+            } else if (event.key === "ArrowLeft") {
+              event.preventDefault();
+              setPage(currentPage - 1, { focusDot: true });
+            }
+          });
+        });
+
+        document.addEventListener("keydown", (event) => {
+          const target = event.target;
+          if (
+            target instanceof HTMLElement &&
+            target.closest("input, textarea, select, [contenteditable='true']")
+          ) {
+            return;
+          }
+          if (event.key === "ArrowRight") {
+            setPage(currentPage + 1);
+          } else if (event.key === "ArrowLeft") {
+            setPage(currentPage - 1);
+          }
+        });
+
+        let pointerStartX = null;
+        let pointerStartY = null;
+        let pointerId = null;
+
+        elements.pages.addEventListener("pointerdown", (event) => {
+          if (event.isPrimary === false) return;
+          pointerStartX = event.clientX;
+          pointerStartY = event.clientY;
+          pointerId = event.pointerId;
+          if (elements.pages.setPointerCapture) {
+            elements.pages.setPointerCapture(pointerId);
+          }
+        });
+
+        function resetPointerTracking() {
+          pointerStartX = null;
+          pointerStartY = null;
+          pointerId = null;
+        }
+
+        elements.pages.addEventListener("pointerup", (event) => {
+          if (pointerId === null || event.pointerId !== pointerId) return;
+          if (pointerStartX !== null && pointerStartY !== null) {
+            const dx = event.clientX - pointerStartX;
+            const dy = event.clientY - pointerStartY;
+            if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > SWIPE_THRESHOLD) {
+              setPage(currentPage + (dx < 0 ? 1 : -1));
+            }
+          }
+          if (elements.pages.releasePointerCapture && pointerId !== null) {
+            try {
+              elements.pages.releasePointerCapture(pointerId);
+            } catch {
+              // ignore release errors
+            }
+          }
+          resetPointerTracking();
+        });
+
+        elements.pages.addEventListener("pointercancel", () => {
+          resetPointerTracking();
+        });
+
+        setPage(currentPage);
 
         async function handleEncrypt() {
           try {
             setStatus("Encrypting…");
             const passphrase = getPassphraseForEncrypt();
             const iterations = parseIterations(elements.iterations.value);
-            const plaintext = elements.plaintext.value;
+            const plaintext = elements.encryptPlaintext.value;
             const blobJson = await encryptPlaintext(plaintext, passphrase, iterations);
-            elements.ciphertext.value = blobJson;
+            setCiphertext(blobJson);
+            workflows.encrypt.setStep(3, { force: true });
             setStatus("Encryption complete.", "success");
           } catch (err) {
             console.error(err);
-            setStatus(err.message || String(err), "error");
+            setStatus(err instanceof Error ? err.message : String(err), "error");
           }
         }
 
@@ -330,13 +904,15 @@
           try {
             setStatus("Decrypting…");
             const passphrase = getPassphraseForDecrypt();
-            const blobJson = elements.ciphertext.value;
+            const blobJson = elements.ciphertextDecrypt.value;
             const plaintext = await decryptBlob(blobJson, passphrase);
-            elements.plaintext.value = plaintext;
+            elements.decryptPlaintext.value = plaintext;
+            elements.encryptPlaintext.value = plaintext;
+            workflows.decrypt.setStep(2, { force: true });
             setStatus("Decryption complete.", "success");
           } catch (err) {
             console.error(err);
-            setStatus(err.message || String(err), "error");
+            setStatus(err instanceof Error ? err.message : String(err), "error");
           }
         }
 
@@ -345,7 +921,7 @@
             setStatus("Web NFC not supported on this device.", "error");
             return;
           }
-          const blobJson = elements.ciphertext.value.trim();
+          const blobJson = elements.ciphertextEncrypt.value.trim();
           if (!blobJson) {
             setStatus("Encrypt text first before writing to NFC.", "error");
             return;
@@ -365,14 +941,14 @@
             setStatus("Encrypted blob written to NFC tag.", "success");
           } catch (err) {
             console.error(err);
-            setStatus(err.message || "Failed to write to NFC.", "error");
+            setStatus(err instanceof Error ? err.message : "Failed to write to NFC.", "error");
           }
         }
 
         elements.encryptBtn.addEventListener("click", handleEncrypt);
         elements.decryptBtn.addEventListener("click", handleDecrypt);
         elements.copyCiphertextBtn.addEventListener("click", async () => {
-          const data = elements.ciphertext.value.trim();
+          const data = elements.ciphertextEncrypt.value.trim();
           if (!data) {
             setStatus("No encrypted data to copy.", "error");
             return;
@@ -383,6 +959,23 @@
           } catch (err) {
             console.error(err);
             setStatus("Clipboard write failed. Copy manually.", "error");
+          }
+        });
+
+        elements.pasteCiphertextBtn.addEventListener("click", async () => {
+          try {
+            const text = await navigator.clipboard.readText();
+            if (!text.trim()) {
+              setStatus("Clipboard does not contain any text.", "error");
+              return;
+            }
+            setCiphertext(text.trim());
+            setPage(1);
+            workflows.decrypt.setStep(1, { force: true });
+            setStatus("Encrypted blob pasted from clipboard.", "success");
+          } catch (err) {
+            console.error(err);
+            setStatus("Clipboard read failed. Paste manually instead.", "error");
           }
         });
 
@@ -418,11 +1011,13 @@
             if (!payload || typeof payload !== "string") {
               throw new Error("No readable data on tag.");
             }
-            elements.ciphertext.value = payload;
+            setCiphertext(payload);
+            setPage(1);
+            workflows.decrypt.setStep(1, { force: true });
             setStatus("Encrypted blob loaded from NFC tag.", "success");
           } catch (err) {
             console.error(err);
-            setStatus(err.message || "Failed to read from NFC.", "error");
+            setStatus(err instanceof Error ? err.message : "Failed to read from NFC.", "error");
           }
         }
 
