@@ -195,65 +195,107 @@
           0 12px 30px rgba(56, 189, 248, 0.35),
           inset 0 0 0 1px rgba(241, 245, 249, 0.35);
       }
-      .settings-popover {
+      .settings-layer {
         position: fixed;
         inset: 0;
-        display: grid;
-        align-items: flex-start;
-        justify-content: flex-end;
-        padding: clamp(1rem, 5vw, 2.75rem);
-        background: rgba(2, 6, 23, 0.55);
-        backdrop-filter: blur(8px);
         z-index: 1000;
-        overflow: auto;
+        pointer-events: none;
       }
-      .settings-popover[hidden] {
+      .settings-layer.is-open {
+        pointer-events: auto;
+      }
+      .settings-layer[hidden] {
         display: none !important;
       }
-      @media (max-width: 640px) {
-        .settings-popover {
-          justify-content: center;
-          align-items: center;
-        }
-      }
       .advanced-settings {
-        background: rgba(15, 23, 42, 0.65);
-        border: 1px solid rgba(148, 163, 184, 0.2);
-        border-radius: 20px;
-        padding: 1.2rem 1.4rem;
+        position: fixed;
         display: grid;
-        gap: 1rem;
-        margin-bottom: 0;
-        width: min(100%, 360px);
-        backdrop-filter: blur(18px);
+        gap: 0.75rem;
+        min-width: 240px;
+        max-width: min(320px, 90vw);
+        padding: 1rem 1.1rem 1.1rem;
+        border-radius: 16px;
+        border: 1px solid rgba(59, 130, 246, 0.32);
+        background: rgba(8, 11, 20, 0.94);
+        box-shadow:
+          0 18px 40px rgba(15, 23, 42, 0.45),
+          0 0 0 1px rgba(59, 130, 246, 0.08);
+        pointer-events: auto;
+        --pointer-offset: 50%;
+      }
+      .advanced-settings::before {
+        content: "";
+        position: absolute;
+        top: -7px;
+        left: var(--pointer-offset);
+        width: 14px;
+        height: 14px;
+        transform: translateX(-50%) rotate(45deg);
+        background: rgba(8, 11, 20, 0.94);
+        border-left: 1px solid rgba(59, 130, 246, 0.32);
+        border-top: 1px solid rgba(59, 130, 246, 0.32);
+        box-shadow: -3px -3px 12px rgba(15, 23, 42, 0.4);
       }
       .advanced-settings h3 {
         margin: 0;
-        font-size: 1.2rem;
-        color: #f8fafc;
+        font-size: 1rem;
+        color: rgba(241, 245, 249, 0.94);
         letter-spacing: -0.01em;
       }
       .advanced-settings .settings-description {
         margin: 0;
-        color: rgba(226, 232, 240, 0.72);
-        font-size: 0.95rem;
-        line-height: 1.5;
+        color: rgba(148, 163, 184, 0.85);
+        font-size: 0.85rem;
       }
-      .advanced-settings .settings-controls {
+      .settings-toggle {
         display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
+        gap: 0.6rem;
         align-items: center;
       }
-      .advanced-settings .settings-controls label {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+      .advanced-settings .toggle-btn {
+        border: 1px solid rgba(99, 102, 241, 0.4);
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.25), rgba(14, 116, 233, 0.2));
+        border-radius: 999px;
+        color: rgba(248, 250, 252, 0.9);
         font-weight: 600;
-        color: rgba(226, 232, 240, 0.9);
+        padding: 0.5rem 1.2rem;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
       }
-      .advanced-settings input[type="number"] {
-        width: 5rem;
+      .advanced-settings .toggle-btn:hover,
+      .advanced-settings .toggle-btn:focus-visible {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.38), rgba(14, 165, 233, 0.32));
+        border-color: rgba(165, 180, 252, 0.8);
+        outline: none;
+        transform: translateY(-1px);
+      }
+      .advanced-settings .toggle-btn[aria-pressed="true"] {
+        background: linear-gradient(135deg, rgba(129, 140, 248, 0.95), rgba(56, 189, 248, 0.9));
+        color: #0b1120;
+        border-color: rgba(226, 232, 240, 0.6);
+        box-shadow: 0 12px 26px rgba(99, 102, 241, 0.35);
+      }
+      .settings-fields {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+      }
+      .settings-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: rgba(191, 219, 254, 0.72);
+      }
+      .settings-field input[type="number"] {
+        width: 4.6rem;
+        text-align: center;
+      }
+      .settings-divider {
+        color: rgba(148, 163, 184, 0.6);
+        font-size: 0.75rem;
       }
       .shamir-section {
         display: grid;
@@ -563,7 +605,7 @@
             FAQ
           </button>
         </div>
-        <div id="advanced-settings-layer" class="settings-popover" hidden>
+        <div id="advanced-settings-layer" class="settings-layer" hidden>
           <div
             id="advanced-settings"
             class="advanced-settings"
@@ -573,23 +615,23 @@
             tabindex="-1"
           >
             <h3 id="advanced-settings-title">Advanced mode</h3>
-            <p class="settings-description">
-              Enable Shamir secret sharing to split the encrypted blob into recoverable keys. Combine any K of N keys to restore the ciphertext and decrypt as usual.
-            </p>
-            <div class="settings-controls">
-              <label>
-                <input type="checkbox" id="advanced-enable" />
-                Enable
-              </label>
-              <label>
-                K threshold
+            <div class="settings-toggle">
+              <button type="button" id="advanced-enable" class="toggle-btn" aria-pressed="false">
+                Advanced mode off
+              </button>
+            </div>
+            <div class="settings-fields" role="group" aria-label="Shamir key split configuration">
+              <label class="settings-field">
+                <span>Threshold</span>
                 <input id="advanced-threshold" type="number" min="2" max="10" value="2" />
               </label>
-              <label>
-                N total keys
+              <span class="settings-divider">of</span>
+              <label class="settings-field">
+                <span>Total keys</span>
                 <input id="advanced-total" type="number" min="2" max="10" value="3" />
               </label>
             </div>
+            <p class="settings-description">Split ciphertext into coordinated recovery keys.</p>
             <p id="advanced-summary" class="settings-description"></p>
           </div>
         </div>
@@ -1316,17 +1358,67 @@
         let settingsPanelOpen = false;
         let lastSettingsTrigger = null;
 
-        function setSettingsPanelVisible(visible) {
+        function positionSettingsPanel(trigger) {
+          const panel = elements.advancedSettings;
+          if (!panel) return;
+          const reference = trigger instanceof HTMLElement ? trigger : null;
+          panel.style.visibility = "hidden";
+          panel.style.top = "0px";
+          panel.style.left = "0px";
+          requestAnimationFrame(() => {
+            if (!settingsPanelOpen) return;
+            const panelRect = panel.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            const targetRect = reference?.getBoundingClientRect() ?? null;
+            let top = viewportHeight / 2 - panelRect.height / 2;
+            let left = viewportWidth / 2 - panelRect.width / 2;
+            if (targetRect) {
+              top = targetRect.bottom + 12;
+              left = targetRect.left + targetRect.width / 2 - panelRect.width / 2;
+            }
+            top = Math.min(
+              Math.max(16, top),
+              viewportHeight - panelRect.height - 16,
+            );
+            left = Math.min(
+              Math.max(16, left),
+              viewportWidth - panelRect.width - 16,
+            );
+            const pointerCenter = targetRect
+              ? targetRect.left + targetRect.width / 2
+              : left + panelRect.width / 2;
+            const pointerOffset = Math.max(
+              18,
+              Math.min(panelRect.width - 18, pointerCenter - left),
+            );
+            panel.style.setProperty("--pointer-offset", `${Math.round(pointerOffset)}px`);
+            panel.style.top = `${Math.round(top)}px`;
+            panel.style.left = `${Math.round(left)}px`;
+            panel.style.visibility = "visible";
+          });
+        }
+
+        function setSettingsPanelVisible(visible, options = {}) {
           settingsPanelOpen = Boolean(visible);
           elements.advancedSettingsLayer.hidden = !settingsPanelOpen;
+          elements.advancedSettingsLayer.classList.toggle("is-open", settingsPanelOpen);
           elements.advancedSettings.hidden = !settingsPanelOpen;
+          elements.advancedSettings.setAttribute("aria-hidden", settingsPanelOpen ? "false" : "true");
           settingsButtons.forEach((button) => {
             button.setAttribute("aria-expanded", settingsPanelOpen ? "true" : "false");
           });
           if (settingsPanelOpen) {
+            positionSettingsPanel(options.trigger ?? lastSettingsTrigger);
             elements.advancedSettings.focus();
-          } else if (lastSettingsTrigger instanceof HTMLElement) {
-            lastSettingsTrigger.focus();
+          } else {
+            elements.advancedSettings.style.visibility = "";
+            elements.advancedSettings.style.top = "";
+            elements.advancedSettings.style.left = "";
+            elements.advancedSettings.style.removeProperty("--pointer-offset");
+            if (lastSettingsTrigger instanceof HTMLElement) {
+              lastSettingsTrigger.focus();
+            }
           }
         }
 
@@ -1395,20 +1487,25 @@
 
         function updateAdvancedSummary() {
           if (advancedState.enabled) {
-            elements.advancedSummary.textContent = `Advanced mode enabled: any ${advancedState.threshold} of ${advancedState.total} keys will restore the ciphertext.`;
+            elements.advancedSummary.textContent = `Any ${advancedState.threshold} of ${advancedState.total} keys will unlock the ciphertext.`;
             elements.shamirDecryptHelper.textContent = `Import any ${advancedState.threshold} of ${advancedState.total} keys to rebuild the encrypted blob automatically.`;
           } else {
-            elements.advancedSummary.textContent =
-              "Advanced mode disabled. Encryption produces a single JSON blob without split keys.";
+            elements.advancedSummary.textContent = "Advanced mode off — encryption stays a single JSON blob.";
             elements.shamirDecryptHelper.textContent =
               "Import any K of N keys to rebuild the encrypted blob automatically.";
           }
-          elements.advancedToggle.checked = advancedState.enabled;
+          elements.advancedToggle.setAttribute("aria-pressed", advancedState.enabled ? "true" : "false");
+          elements.advancedToggle.textContent = advancedState.enabled
+            ? "Advanced mode on"
+            : "Advanced mode off";
           elements.advancedThreshold.value = String(advancedState.threshold);
           elements.advancedTotal.value = String(advancedState.total);
           settingsButtons.forEach((button) => {
             button.setAttribute("aria-pressed", advancedState.enabled ? "true" : "false");
           });
+          if (settingsPanelOpen) {
+            positionSettingsPanel(lastSettingsTrigger);
+          }
         }
 
         function updateShamirStepMessage() {
@@ -1997,7 +2094,7 @@
             event.preventDefault();
             event.stopPropagation();
             lastSettingsTrigger = button;
-            setSettingsPanelVisible(!settingsPanelOpen);
+            setSettingsPanelVisible(!settingsPanelOpen, { trigger: button });
           });
         });
 
@@ -2028,13 +2125,20 @@
           }
         });
 
+        const repositionSettingsPanel = () => {
+          if (settingsPanelOpen) {
+            positionSettingsPanel(lastSettingsTrigger);
+          }
+        };
+        window.addEventListener("resize", repositionSettingsPanel);
+        window.addEventListener("scroll", repositionSettingsPanel, true);
+
         setSettingsPanelVisible(false);
         syncAdvancedInputs();
         setAdvancedEnabled(false);
 
-        elements.advancedToggle.addEventListener("change", (event) => {
-          if (!(event.target instanceof HTMLInputElement)) return;
-          setAdvancedEnabled(event.target.checked);
+        elements.advancedToggle.addEventListener("click", () => {
+          setAdvancedEnabled(!advancedState.enabled);
         });
 
         const advancedInputHandler = () => syncAdvancedInputs({ report: advancedState.enabled });
