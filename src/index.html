@@ -230,6 +230,15 @@
         margin: 0;
         line-height: 1.65;
       }
+      .faq-card ul {
+        margin: 0;
+        padding-left: 1.25rem;
+        line-height: 1.6;
+        color: rgba(226, 232, 240, 0.82);
+      }
+      .faq-card li + li {
+        margin-top: 0.35rem;
+      }
       .faq-card a {
         color: #93c5fd;
         text-decoration: none;
@@ -588,6 +597,10 @@
               <h2>FAQ</h2>
             </div>
             <div class="faq-content">
+              <article class="faq-card">
+                <h3>What's it for?</h3>
+                <p>Encrypt sensitive text—recovery codes, seed phrases, anything private—and store the encrypted blob on an NFC tag instead of relying on vulnerable handwriting or printed copies.</p>
+              </article>
               <article class="faq-card">
                 <h3>How should I use it?</h3>
                 <p>
