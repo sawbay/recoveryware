@@ -11,9 +11,10 @@
     />
     <style>
       :root {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        color: #1f2933;
-        background-color: #f1f5f9;
+        font-family: "SF Pro Display", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        color: #f9fafb;
+        background-color: #090b11;
         line-height: 1.5;
       }
       *,
@@ -25,28 +26,38 @@
         margin: 0;
         padding: clamp(1.5rem, 5vw, 3rem);
         min-height: 100vh;
-        background: #f1f5f9;
+        background:
+          radial-gradient(circle at 20% 20%, rgba(120, 119, 198, 0.18), transparent 60%),
+          radial-gradient(circle at 80% 0%, rgba(56, 189, 248, 0.12), transparent 50%),
+          radial-gradient(circle at 0% 80%, rgba(192, 132, 252, 0.15), transparent 55%),
+          #040509;
         display: flex;
         justify-content: center;
         align-items: flex-start;
+        color: inherit;
       }
       .shell {
-        width: min(100%, 720px);
+        width: min(100%, 760px);
         display: grid;
-        gap: clamp(1.5rem, 4vw, 2.5rem);
+        gap: clamp(1.5rem, 4vw, 2.75rem);
       }
       header {
         text-align: center;
         display: grid;
-        gap: 0.75rem;
+        gap: 0.5rem;
+        color: #f8fafc;
       }
       header h1 {
         margin: 0;
-        font-size: clamp(2rem, 5vw, 2.5rem);
+        font-size: clamp(2.4rem, 5vw, 3rem);
+        letter-spacing: -0.03em;
+        text-shadow: 0 12px 24px rgba(15, 23, 42, 0.45);
       }
       header p {
         margin: 0;
-        color: #475569;
+        color: rgba(226, 232, 240, 0.72);
+        max-width: 48ch;
+        justify-self: center;
       }
       main {
         display: grid;
@@ -55,95 +66,118 @@
       }
       .tab-bar {
         display: inline-flex;
-        background: #e0e7ff;
+        background: rgba(148, 163, 184, 0.12);
         border-radius: 999px;
-        padding: 0.3rem;
-        gap: 0.25rem;
+        padding: 0.35rem;
+        gap: 0.35rem;
         justify-self: center;
+        box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.16);
+        backdrop-filter: blur(18px);
       }
       .tab-btn {
         border: none;
         background: transparent;
-        color: #1e3a8a;
+        color: rgba(226, 232, 240, 0.76);
         font-weight: 600;
-        padding: 0.45rem 1.2rem;
+        padding: 0.75rem 1.75rem;
         border-radius: 999px;
         cursor: pointer;
-        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        transition: all 0.25s ease;
       }
       .tab-btn:focus-visible {
-        outline: 2px solid #2563eb;
-        outline-offset: 2px;
+        outline: 2px solid rgba(148, 163, 184, 0.5);
+        outline-offset: 3px;
       }
       .tab-btn:hover:not(.tab-btn--active) {
-        background: rgba(37, 99, 235, 0.1);
+        background: rgba(148, 163, 184, 0.18);
+        color: #f8fafc;
         transform: translateY(-1px);
       }
       .tab-btn--active {
-        background: white;
-        color: #0f172a;
-        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.85), rgba(14, 165, 233, 0.85));
+        color: #0a0c12;
+        box-shadow:
+          0 12px 30px rgba(56, 189, 248, 0.35),
+          inset 0 0 0 1px rgba(241, 245, 249, 0.35);
       }
       .tab-panels {
         display: grid;
-        gap: 1.5rem;
+        gap: 1.75rem;
       }
       .tab-panel {
-        display: none;
+        display: none !important;
       }
       .tab-panel--active {
-        display: grid;
+        display: grid !important;
       }
       .panel {
-        background: white;
-        border-radius: 18px;
-        padding: 1.5rem;
-        box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
+        background: rgba(15, 16, 24, 0.72);
+        border-radius: 24px;
+        padding: clamp(1.5rem, 4vw, 2.3rem);
+        box-shadow:
+          0 32px 80px rgba(2, 6, 23, 0.7),
+          0 4px 20px rgba(15, 23, 42, 0.3),
+          inset 0 1px 0 rgba(148, 163, 184, 0.08);
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        backdrop-filter: blur(24px);
         display: grid;
         gap: 1.1rem;
       }
       @media (min-width: 768px) {
         .panel {
-          padding: 2rem;
+          padding: clamp(2rem, 3vw, 2.6rem);
         }
       }
       .section-header {
         display: grid;
-        gap: 0.3rem;
+        gap: 0.25rem;
       }
       .section-header h2 {
         margin: 0;
-        font-size: 1.55rem;
+        font-size: 1.6rem;
+        letter-spacing: -0.015em;
+        color: #f8fafc;
       }
       .section-header p {
         margin: 0;
-        color: #4b5563;
+        color: rgba(226, 232, 240, 0.6);
         font-size: 0.95rem;
-        line-height: 1.4;
+        line-height: 1.5;
       }
       label {
         display: grid;
         gap: 0.5rem;
         font-weight: 600;
-        color: inherit;
+        color: rgba(226, 232, 240, 0.94);
       }
       input[type="password"],
       input[type="number"],
       textarea {
         width: 100%;
-        padding: 0.65rem 0.8rem;
-        border-radius: 10px;
-        border: 1px solid #cbd5f5;
+        padding: 0.75rem 1rem;
+        border-radius: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.18);
         font: inherit;
-        background: white;
-        color: inherit;
+        background: rgba(15, 23, 42, 0.55);
+        color: #f8fafc;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+      input[type="password"]:focus-visible,
+      input[type="number"]:focus-visible,
+      textarea:focus-visible {
+        outline: none;
+        border-color: rgba(129, 140, 248, 0.65);
+        box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.15);
+        background: rgba(20, 28, 48, 0.75);
       }
       textarea {
         resize: vertical;
         min-height: 8rem;
       }
       textarea[readonly] {
-        background: #f8fafc;
+        background: rgba(15, 23, 42, 0.4);
+        color: rgba(226, 232, 240, 0.65);
       }
       input[type="number"] {
         appearance: textfield;
@@ -153,47 +187,55 @@
         margin: 0;
         appearance: none;
       }
+      input::placeholder,
+      textarea::placeholder {
+        color: rgba(148, 163, 184, 0.6);
+      }
       .helper-text {
         margin: 0;
-        color: #6b7280;
+        color: rgba(148, 163, 184, 0.72);
         font-size: 0.9rem;
       }
       .controls {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.75rem;
+        gap: 0.85rem;
       }
       .action-btn {
-        background: #2563eb;
-        color: white;
+        background: linear-gradient(135deg, #6366f1, #0ea5e9);
+        color: #0a0c12;
         border: none;
-        border-radius: 10px;
-        padding: 0.6rem 1.3rem;
+        border-radius: 16px;
+        padding: 0.85rem 1.9rem;
+        min-height: 3rem;
         font-weight: 600;
+        letter-spacing: 0.01em;
         cursor: pointer;
-        transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        transition: transform 0.2s ease, box-shadow 0.25s ease, filter 0.2s ease;
       }
       .action-btn:hover:not(:disabled),
       .action-btn:focus-visible:not(:disabled) {
-        transform: translateY(-1px);
-        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 20px 40px rgba(14, 165, 233, 0.35);
+        filter: brightness(1.08);
         outline: none;
       }
       .action-btn:disabled {
-        background: #94a3b8;
-        color: #e2e8f0;
+        background: rgba(148, 163, 184, 0.22);
+        color: rgba(226, 232, 240, 0.4);
         cursor: not-allowed;
         box-shadow: none;
         transform: none;
       }
       .action-btn.secondary {
-        background: #e0e7ff;
-        color: #1e3a8a;
+        background: rgba(148, 163, 184, 0.18);
+        color: rgba(226, 232, 240, 0.9);
+        box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.25);
       }
       .action-btn.secondary:hover:not(:disabled),
       .action-btn.secondary:focus-visible:not(:disabled) {
-        background: #c7d2fe;
-        box-shadow: none;
+        background: rgba(148, 163, 184, 0.28);
+        box-shadow: inset 0 0 0 1px rgba(226, 232, 240, 0.22);
       }
       .stepper {
         display: grid;
@@ -221,14 +263,14 @@
       }
       .step-title-position {
         font-size: 0.85rem;
-        color: #64748b;
+        color: rgba(203, 213, 225, 0.6);
         text-transform: uppercase;
         letter-spacing: 0.08em;
       }
       .step-title-name {
         font-weight: 600;
         font-size: 1.05rem;
-        color: #1f2937;
+        color: #f8fafc;
       }
       @media (min-width: 640px) {
         .step-title {
@@ -248,16 +290,18 @@
         display: grid;
       }
       #status {
-        background: #e0e7ff;
-        border-radius: 14px;
-        padding: 0.9rem 1.2rem;
+        background: rgba(59, 130, 246, 0.18);
+        border-radius: 18px;
+        padding: 1rem 1.4rem;
         font-weight: 600;
-        color: #1d4ed8;
+        color: rgba(191, 219, 254, 0.95);
         text-align: center;
+        backdrop-filter: blur(24px);
+        box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.35);
       }
       footer {
         text-align: center;
-        color: #64748b;
+        color: rgba(148, 163, 184, 0.65);
         margin-bottom: 1rem;
       }
     </style>
@@ -609,10 +653,12 @@
 
         function setStatus(message, tone = "info") {
           elements.status.textContent = message;
-          const color =
-            tone === "error" ? "#dc2626" : tone === "success" ? "#15803d" : "#1d4ed8";
-          const background =
-            tone === "error" ? "#fee2e2" : tone === "success" ? "#dcfce7" : "#e0e7ff";
+          const toneStyles = {
+            error: { color: "#fecaca", background: "rgba(248, 113, 113, 0.16)" },
+            success: { color: "#bbf7d0", background: "rgba(34, 197, 94, 0.16)" },
+            info: { color: "rgba(191, 219, 254, 0.95)", background: "rgba(59, 130, 246, 0.18)" },
+          };
+          const { color, background } = toneStyles[tone] ?? toneStyles.info;
           elements.status.style.color = color;
           elements.status.style.background = background;
         }
