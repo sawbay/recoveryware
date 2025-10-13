@@ -211,6 +211,25 @@
         flex-wrap: wrap;
         gap: 0.85rem;
       }
+      .faq-content {
+        display: grid;
+        gap: 1.25rem;
+        color: rgba(226, 232, 240, 0.82);
+      }
+      .faq-card {
+        display: grid;
+        gap: 0.5rem;
+      }
+      .faq-card h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        color: #f8fafc;
+        letter-spacing: -0.01em;
+      }
+      .faq-card p {
+        margin: 0;
+        line-height: 1.65;
+      }
       .action-btn {
         background: linear-gradient(135deg, #6366f1, #0ea5e9);
         color: #0a0c12;
@@ -346,6 +365,17 @@
             tabindex="-1"
           >
             Decrypt
+          </button>
+          <button
+            type="button"
+            class="tab-btn"
+            data-tab-target="faq"
+            role="tab"
+            aria-controls="tab-faq"
+            aria-selected="false"
+            tabindex="-1"
+          >
+            FAQ
           </button>
         </div>
         <div class="tab-panels" id="tab-panels" data-active-tab="encrypt">
@@ -537,14 +567,47 @@
               </div>
             </div>
           </section>
+
+          <section
+            class="panel tab-panel"
+            id="tab-faq"
+            data-tab="faq"
+            role="tabpanel"
+            aria-label="FAQ"
+            aria-hidden="true"
+          >
+            <div class="section-header">
+              <h2>FAQ</h2>
+            </div>
+            <div class="faq-content">
+              <article class="faq-card">
+                <h3>How should I use it?</h3>
+                <p>
+                  Open Recovery Ware in a private/incognito tab, enable airplane mode, finish your encrypt or decrypt
+                  task, copy the result, then close the tab. Nothing persists after the window closes.
+                </p>
+              </article>
+              <article class="faq-card">
+                <h3>Is anything stored or sent?</h3>
+                <p>
+                  No. Every operation happens in your browser memory only—no network calls, no local storage.
+                </p>
+              </article>
+              <article class="faq-card">
+                <h3>How can I verify it?</h3>
+                <p>
+                  Use “View Source” or your dev tools to inspect the single HTML file. What you see there is exactly
+                  what runs.
+                </p>
+              </article>
+            </div>
+          </section>
         </div>
       </main>
 
       <div id="status" role="status" aria-live="polite">Ready.</div>
 
-      <footer>
-        <p>Data never leaves your browser. Ensure you wipe downloaded plaintext files after use.</p>
-      </footer>
+      <footer></footer>
     </div>
 
     <script type="module">
