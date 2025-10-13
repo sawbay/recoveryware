@@ -142,6 +142,16 @@
         display: grid;
         gap: 0.25rem;
       }
+      .section-header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+      .section-header-row h2 {
+        margin: 0;
+        flex: 1;
+      }
       .section-header h2 {
         margin: 0;
         font-size: 1.6rem;
@@ -153,6 +163,206 @@
         color: rgba(226, 232, 240, 0.6);
         font-size: 0.95rem;
         line-height: 1.5;
+      }
+      .settings-btn {
+        border: 1px solid rgba(148, 163, 184, 0.28);
+        background: rgba(148, 163, 184, 0.12);
+        border-radius: 999px;
+        color: rgba(226, 232, 240, 0.9);
+        padding: 0.45rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      }
+      .settings-btn svg {
+        width: 1.1rem;
+        height: 1.1rem;
+      }
+      .settings-btn:hover,
+      .settings-btn:focus-visible {
+        background: rgba(148, 163, 184, 0.22);
+        border-color: rgba(226, 232, 240, 0.45);
+        outline: none;
+        transform: translateY(-1px);
+      }
+      .settings-btn[aria-pressed="true"] {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.9), rgba(14, 165, 233, 0.9));
+        color: #0a0c12;
+        border-color: rgba(226, 232, 240, 0.5);
+        box-shadow:
+          0 12px 30px rgba(56, 189, 248, 0.35),
+          inset 0 0 0 1px rgba(241, 245, 249, 0.35);
+      }
+      .settings-layer {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        pointer-events: none;
+      }
+      .settings-layer.is-open {
+        pointer-events: auto;
+      }
+      .settings-layer[hidden] {
+        display: none !important;
+      }
+      .advanced-settings {
+        position: fixed;
+        display: grid;
+        gap: 0.75rem;
+        min-width: 240px;
+        max-width: min(320px, 90vw);
+        padding: 1rem 1.1rem 1.1rem;
+        border-radius: 16px;
+        border: 1px solid rgba(59, 130, 246, 0.32);
+        background: rgba(8, 11, 20, 0.94);
+        box-shadow:
+          0 18px 40px rgba(15, 23, 42, 0.45),
+          0 0 0 1px rgba(59, 130, 246, 0.08);
+        pointer-events: auto;
+        --pointer-offset: 50%;
+      }
+      .advanced-settings::before {
+        content: "";
+        position: absolute;
+        top: -7px;
+        left: var(--pointer-offset);
+        width: 14px;
+        height: 14px;
+        transform: translateX(-50%) rotate(45deg);
+        background: rgba(8, 11, 20, 0.94);
+        border-left: 1px solid rgba(59, 130, 246, 0.32);
+        border-top: 1px solid rgba(59, 130, 246, 0.32);
+        box-shadow: -3px -3px 12px rgba(15, 23, 42, 0.4);
+      }
+      .advanced-settings h3 {
+        margin: 0;
+        font-size: 1rem;
+        color: rgba(241, 245, 249, 0.94);
+        letter-spacing: -0.01em;
+      }
+      .advanced-settings .settings-description {
+        margin: 0;
+        color: rgba(148, 163, 184, 0.85);
+        font-size: 0.85rem;
+      }
+      .settings-toggle {
+        display: flex;
+        gap: 0.6rem;
+        align-items: center;
+      }
+      .advanced-settings .toggle-btn {
+        border: 1px solid rgba(99, 102, 241, 0.4);
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.25), rgba(14, 116, 233, 0.2));
+        border-radius: 999px;
+        color: rgba(248, 250, 252, 0.9);
+        font-weight: 600;
+        padding: 0.5rem 1.2rem;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+      }
+      .advanced-settings .toggle-btn:hover,
+      .advanced-settings .toggle-btn:focus-visible {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.38), rgba(14, 165, 233, 0.32));
+        border-color: rgba(165, 180, 252, 0.8);
+        outline: none;
+        transform: translateY(-1px);
+      }
+      .advanced-settings .toggle-btn[aria-pressed="true"] {
+        background: linear-gradient(135deg, rgba(129, 140, 248, 0.95), rgba(56, 189, 248, 0.9));
+        color: #0b1120;
+        border-color: rgba(226, 232, 240, 0.6);
+        box-shadow: 0 12px 26px rgba(99, 102, 241, 0.35);
+      }
+      .settings-fields {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+      }
+      .settings-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: rgba(191, 219, 254, 0.72);
+      }
+      .settings-field input[type="number"] {
+        width: 4.6rem;
+        text-align: center;
+      }
+      .settings-divider {
+        color: rgba(148, 163, 184, 0.6);
+        font-size: 0.75rem;
+      }
+      .shamir-section {
+        display: grid;
+        gap: 1rem;
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        border-radius: 18px;
+        padding: 1.2rem;
+      }
+      .shamir-section h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #f8fafc;
+      }
+      .shamir-section .helper-text {
+        margin: 0;
+      }
+      .shamir-share-list,
+      .shamir-collected-list {
+        display: grid;
+        gap: 1rem;
+      }
+      .shamir-collected-list {
+        margin: 0;
+        padding: 0;
+      }
+      .share-card {
+        display: grid;
+        gap: 0.75rem;
+        padding: 1rem;
+        border-radius: 16px;
+        background: rgba(15, 23, 42, 0.55);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+      }
+      .share-card header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 600;
+        color: rgba(226, 232, 240, 0.9);
+      }
+      .share-card textarea {
+        width: 100%;
+        min-height: 160px;
+        resize: vertical;
+      }
+      .shamir-collect-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+      #shamir-share-input {
+        width: 100%;
+        min-height: 120px;
+      }
+      .shamir-collected-list li {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        border-radius: 14px;
+        background: rgba(30, 41, 59, 0.6);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+      }
+      .shamir-collected-list button {
+        margin-left: 1rem;
       }
       label {
         display: grid;
@@ -395,6 +605,36 @@
             FAQ
           </button>
         </div>
+        <div id="advanced-settings-layer" class="settings-layer" hidden>
+          <div
+            id="advanced-settings"
+            class="advanced-settings"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="advanced-settings-title"
+            tabindex="-1"
+          >
+            <h3 id="advanced-settings-title">Advanced mode</h3>
+            <div class="settings-toggle">
+              <button type="button" id="advanced-enable" class="toggle-btn" aria-pressed="false">
+                Advanced mode off
+              </button>
+            </div>
+            <div class="settings-fields" role="group" aria-label="Shamir key split configuration">
+              <label class="settings-field">
+                <span>Threshold</span>
+                <input id="advanced-threshold" type="number" min="2" max="10" value="2" />
+              </label>
+              <span class="settings-divider">of</span>
+              <label class="settings-field">
+                <span>Total keys</span>
+                <input id="advanced-total" type="number" min="2" max="10" value="3" />
+              </label>
+            </div>
+            <p class="settings-description">Split ciphertext into coordinated recovery keys.</p>
+            <p id="advanced-summary" class="settings-description"></p>
+          </div>
+        </div>
         <div class="tab-panels" id="tab-panels" data-active-tab="encrypt">
           <section
             class="panel tab-panel tab-panel--active"
@@ -405,7 +645,24 @@
             aria-hidden="false"
           >
             <div class="section-header">
-              <h2>Encrypt</h2>
+              <div class="section-header-row">
+                <h2>Encrypt</h2>
+                <button
+                  type="button"
+                  class="settings-btn"
+                  data-settings-trigger
+                  aria-expanded="false"
+                  aria-controls="advanced-settings"
+                  aria-pressed="false"
+                  title="Toggle advanced Shamir secret sharing settings"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                      d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm8.5-3a6.5 6.5 0 0 1-.06.86l2.11 1.65a1 1 0 0 1 .24 1.3l-2 3.46a1 1 0 0 1-1.21.45l-2.49-1a6.52 6.52 0 0 1-1.49.86l-.38 2.65a1 1 0 0 1-1 .86h-4a1 1 0 0 1-1-.86l-.38-2.65a6.52 6.52 0 0 1-1.49-.86l-2.49 1a1 1 0 0 1-1.21-.45l-2-3.46a1 1 0 0 1 .24-1.3l2.11-1.65A6.5 6.5 0 0 1 3.5 12a6.5 6.5 0 0 1 .06-.86L1.45 9.49a1 1 0 0 1-.24-1.3l2-3.46a1 1 0 0 1 1.21-.45l2.49 1a6.52 6.52 0 0 1 1.49-.86l.38-2.65A1 1 0 0 1 10 1h4a1 1 0 0 1 1 .86l.38 2.65a6.52 6.52 0 0 1 1.49.86l2.49-1a1 1 0 0 1 1.21.45l2 3.46a1 1 0 0 1-.24 1.3l-2.11 1.65c.04.28.07.57.07.87z"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
             <div class="stepper" id="workflow-encrypt">
               <div class="step-toolbar">
@@ -499,6 +756,27 @@
                     </button>
                   </div>
                 </section>
+
+                <section
+                  class="step-panel"
+                  id="encrypt-step-4"
+                  data-step-panel="4"
+                  data-step-name="Shamir keys"
+                  hidden
+                  aria-hidden="true"
+                  data-step-skip
+                >
+                  <p id="shamir-step-message" class="helper-text">
+                    Enable advanced mode to split the ciphertext into multiple recovery keys.
+                  </p>
+                  <div id="shamir-encrypt-section" class="shamir-section" hidden>
+                    <h3>Shamir keys</h3>
+                    <p class="helper-text">
+                      Advanced mode splits the encrypted blob into multiple keys. Store each key securely in different places.
+                    </p>
+                    <div id="shamir-share-list" class="shamir-share-list"></div>
+                  </div>
+                </section>
               </div>
             </div>
           </section>
@@ -512,7 +790,24 @@
             aria-hidden="true"
           >
             <div class="section-header">
-              <h2>Decrypt</h2>
+              <div class="section-header-row">
+                <h2>Decrypt</h2>
+                <button
+                  type="button"
+                  class="settings-btn"
+                  data-settings-trigger
+                  aria-expanded="false"
+                  aria-controls="advanced-settings"
+                  aria-pressed="false"
+                  title="Toggle advanced Shamir secret sharing settings"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                      d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm8.5-3a6.5 6.5 0 0 1-.06.86l2.11 1.65a1 1 0 0 1 .24 1.3l-2 3.46a1 1 0 0 1-1.21.45l-2.49-1a6.52 6.52 0 0 1-1.49.86l-.38 2.65a1 1 0 0 1-1 .86h-4a1 1 0 0 1-1-.86l-.38-2.65a6.52 6.52 0 0 1-1.49-.86l-2.49 1a1 1 0 0 1-1.21-.45l-2-3.46a1 1 0 0 1 .24-1.3l2.11-1.65A6.5 6.5 0 0 1 3.5 12a6.5 6.5 0 0 1 .06-.86L1.45 9.49a1 1 0 0 1-.24-1.3l2-3.46a1 1 0 0 1 1.21-.45l2.49 1a6.52 6.52 0 0 1 1.49-.86l.38-2.65A1 1 0 0 1 10 1h4a1 1 0 0 1 1 .86l.38 2.65a6.52 6.52 0 0 1 1.49.86l2.49-1a1 1 0 0 1 1.21.45l2 3.46a1 1 0 0 1-.24 1.3l-2.11 1.65c.04.28.07.57.07.87z"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
             <div class="stepper" id="workflow-decrypt">
               <div class="step-toolbar">
@@ -525,9 +820,52 @@
               </div>
               <div class="step-panels">
                 <section
-                  class="step-panel step-panel--active"
+                  class="step-panel"
                   id="decrypt-step-0"
                   data-step-panel="0"
+                  data-step-name="Collect Shamir keys"
+                  hidden
+                  aria-hidden="true"
+                  data-step-skip
+                >
+                  <div id="shamir-decrypt-section" class="shamir-section" hidden>
+                    <h3>Collect Shamir keys</h3>
+                    <p id="shamir-decrypt-helper" class="helper-text">
+                      Import any K of N keys to rebuild the encrypted blob automatically.
+                    </p>
+                    <div class="shamir-collect-controls">
+                      <button id="shamir-upload-btn" type="button" class="action-btn secondary">
+                        Upload key files
+                      </button>
+                      <input id="shamir-upload-input" type="file" accept="application/json,.json" multiple hidden />
+                      <button id="shamir-read-share-nfc-btn" type="button" class="action-btn secondary">
+                        Read key from NFC
+                      </button>
+                    </div>
+                    <label>
+                      Paste key JSON
+                      <textarea
+                        id="shamir-share-input"
+                        placeholder='{"version":1,"scheme":"shamir",...}'
+                      ></textarea>
+                    </label>
+                    <div class="controls">
+                      <button id="shamir-add-share-btn" type="button" class="action-btn secondary">
+                        Add pasted key
+                      </button>
+                      <button id="shamir-clear-shares-btn" type="button" class="action-btn secondary">
+                        Clear keys
+                      </button>
+                    </div>
+                    <ul id="shamir-collected-shares" class="shamir-collected-list"></ul>
+                    <p id="shamir-shares-needed" class="helper-text"></p>
+                  </div>
+                </section>
+
+                <section
+                  class="step-panel step-panel--active"
+                  id="decrypt-step-1"
+                  data-step-panel="1"
                   data-step-name="Load encrypted blob"
                   aria-hidden="false"
                 >
@@ -551,8 +889,8 @@
 
                 <section
                   class="step-panel"
-                  id="decrypt-step-1"
-                  data-step-panel="1"
+                  id="decrypt-step-2"
+                  data-step-panel="2"
                   data-step-name="Passphrase (if any)"
                   hidden
                   aria-hidden="true"
@@ -565,8 +903,8 @@
 
                 <section
                   class="step-panel"
-                  id="decrypt-step-2"
-                  data-step-panel="2"
+                  id="decrypt-step-3"
+                  data-step-panel="3"
                   data-step-name="Plain text"
                   hidden
                   aria-hidden="true"
@@ -641,6 +979,162 @@
     <script type="module">
       const DEFAULT_ITERATIONS = 600_000;
       const MIN_ITERATIONS = 100_000;
+      const SHAMIR_DEFAULT_THRESHOLD = 2;
+      const SHAMIR_DEFAULT_TOTAL = 3;
+      const SHAMIR_MAX_SHARES = 10;
+
+      const GF256 = (() => {
+        const POLY = 0x11b;
+        const GENERATOR = 0x03;
+        function multiplyBase(a, b) {
+          let result = 0;
+          let left = a;
+          let right = b;
+          while (right > 0) {
+            if (right & 1) {
+              result ^= left;
+            }
+            right >>= 1;
+            left <<= 1;
+            if (left & 0x100) {
+              left ^= POLY;
+            }
+          }
+          return result;
+        }
+        const exp = new Uint8Array(512);
+        const log = new Uint8Array(256);
+        let x = 1;
+        for (let i = 0; i < 255; i++) {
+          exp[i] = x;
+          log[x] = i;
+          x = multiplyBase(x, GENERATOR);
+        }
+        for (let i = 255; i < 512; i++) {
+          exp[i] = exp[i - 255];
+        }
+        log[0] = 0;
+        function add(a, b) {
+          return a ^ b;
+        }
+        function mul(a, b) {
+          if (a === 0 || b === 0) return 0;
+          return exp[log[a] + log[b]];
+        }
+        function inv(a) {
+          if (a === 0) {
+            throw new Error("Cannot invert zero in GF(256).");
+          }
+          return exp[255 - log[a]];
+        }
+        function div(a, b) {
+          if (b === 0) {
+            throw new Error("Cannot divide by zero in GF(256).");
+          }
+          if (a === 0) return 0;
+          let index = log[a] - log[b];
+          if (index < 0) {
+            index += 255;
+          }
+          return exp[index];
+        }
+        return { add, mul, inv, div };
+      })();
+
+      function evaluatePolynomial(coeffs, x) {
+        if (!coeffs.length) {
+          return 0;
+        }
+        let result = coeffs[coeffs.length - 1];
+        for (let i = coeffs.length - 2; i >= 0; i--) {
+          result = GF256.mul(result, x);
+          result = GF256.add(result, coeffs[i]);
+        }
+        return result;
+      }
+
+      function shamirSplit(secretBytes, threshold, total) {
+        if (!(secretBytes instanceof Uint8Array)) {
+          throw new Error("Secret must be a Uint8Array.");
+        }
+        if (!Number.isInteger(threshold) || !Number.isInteger(total)) {
+          throw new Error("Threshold and total must be integers.");
+        }
+        if (threshold < 2) {
+          throw new Error("Threshold must be at least 2.");
+        }
+        if (total < threshold) {
+          throw new Error("Total number of keys must be ≥ threshold.");
+        }
+        if (total > 255) {
+          throw new Error("Total number of keys cannot exceed 255.");
+        }
+        const shares = Array.from({ length: total }, (_, idx) => ({
+          x: idx + 1,
+          y: new Uint8Array(secretBytes.length),
+        }));
+        if (secretBytes.length === 0) {
+          return shares.map((share) => ({ x: share.x, y: new Uint8Array(0) }));
+        }
+        const coeffBuffer = new Uint8Array(Math.max(1, threshold - 1));
+        for (let byteIndex = 0; byteIndex < secretBytes.length; byteIndex++) {
+          if (threshold > 1) {
+            crypto.getRandomValues(coeffBuffer);
+          }
+          const coeffs = new Uint8Array(threshold);
+          coeffs[0] = secretBytes[byteIndex];
+          for (let c = 1; c < threshold; c++) {
+            coeffs[c] = coeffBuffer[c - 1];
+          }
+          for (const share of shares) {
+            share.y[byteIndex] = evaluatePolynomial(coeffs, share.x);
+          }
+        }
+        return shares;
+      }
+
+      function shamirCombine(shares) {
+        if (!Array.isArray(shares) || shares.length === 0) {
+          throw new Error("Provide at least one share.");
+        }
+        const shareLength = shares[0].y.length;
+        const uniqueX = new Set();
+        for (const share of shares) {
+          if (!share || typeof share.x !== "number" || !(share.y instanceof Uint8Array)) {
+            throw new Error("Share is missing required fields.");
+          }
+          if (share.y.length !== shareLength) {
+            throw new Error("Share lengths do not match.");
+          }
+          if (share.x <= 0 || share.x > 255) {
+            throw new Error("Share x values must be within 1-255.");
+          }
+          if (uniqueX.has(share.x)) {
+            throw new Error("Duplicate share detected.");
+          }
+          uniqueX.add(share.x);
+        }
+        const secret = new Uint8Array(shareLength);
+        for (let byteIndex = 0; byteIndex < shareLength; byteIndex++) {
+          let accum = 0;
+          for (let i = 0; i < shares.length; i++) {
+            const shareI = shares[i];
+            let numerator = 1;
+            let denominator = 1;
+            for (let j = 0; j < shares.length; j++) {
+              if (i === j) continue;
+              const shareJ = shares[j];
+              numerator = GF256.mul(numerator, shareJ.x);
+              denominator = GF256.mul(denominator, GF256.add(shareJ.x, shareI.x));
+            }
+            const factor = GF256.mul(numerator, GF256.inv(denominator));
+            const term = GF256.mul(shareI.y[byteIndex], factor);
+            accum = GF256.add(accum, term);
+          }
+          secret[byteIndex] = accum;
+        }
+        return secret;
+      }
 
       function requireElement(id) {
         const el = document.getElementById(id);
@@ -658,40 +1152,86 @@
         const nameEl = toolbar?.querySelector("[data-step-name]") || null;
 
         let current = 0;
-        let maxVisited = 0;
+        let maxVisitedVisible = 0;
+
+        const isSkipped = (panel) => panel.hasAttribute("data-step-skip");
+        const clampIndex = (value) => Math.max(0, Math.min(value, panels.length - 1));
+        const getVisiblePanels = () => panels.filter((panel) => !isSkipped(panel));
+
+        const findForward = (start) => {
+          for (let i = clampIndex(start); i < panels.length; i++) {
+            if (!isSkipped(panels[i])) return i;
+          }
+          return null;
+        };
+
+        const findBackward = (start) => {
+          for (let i = clampIndex(start); i >= 0; i--) {
+            if (!isSkipped(panels[i])) return i;
+          }
+          return null;
+        };
 
         function setStep(index, options = {}) {
-          const clamped = Math.max(0, Math.min(index, panels.length - 1));
-          if (!options.force && clamped > maxVisited + 1) {
+          const direction = index === current ? 0 : index > current ? 1 : -1;
+          let resolved;
+          if (direction > 0) {
+            resolved = findForward(index);
+          } else if (direction < 0) {
+            resolved = findBackward(index);
+          } else {
+            const clamped = clampIndex(index);
+            if (!isSkipped(panels[clamped])) {
+              resolved = clamped;
+            } else {
+              resolved = findForward(clamped);
+              if (resolved === null) {
+                resolved = findBackward(clamped);
+              }
+            }
+          }
+          if (resolved === null) {
             return;
           }
-          if (clamped > maxVisited) {
-            maxVisited = clamped;
+
+          const visiblePanels = getVisiblePanels();
+          const visibleIndex = visiblePanels.indexOf(panels[resolved]);
+          if (visibleIndex === -1) {
+            return;
           }
-          current = clamped;
+
+          if (!options.force && visibleIndex > maxVisitedVisible + 1) {
+            return;
+          }
+
+          if (visibleIndex > maxVisitedVisible) {
+            maxVisitedVisible = visibleIndex;
+          }
+
+          current = resolved;
           root.dataset.currentStep = String(current);
 
           panels.forEach((panel, idx) => {
-            const active = idx === current;
+            const active = idx === current && !isSkipped(panel);
             panel.classList.toggle("step-panel--active", active);
-            panel.hidden = !active;
+            panel.hidden = !active || isSkipped(panel);
             panel.setAttribute("aria-hidden", active ? "false" : "true");
           });
 
           if (positionEl) {
-            positionEl.textContent = `Step ${current + 1} of ${panels.length}`;
+            positionEl.textContent = `Step ${visibleIndex + 1} of ${visiblePanels.length}`;
           }
           if (nameEl) {
             nameEl.textContent = panels[current]?.dataset.stepName || "";
           }
           if (prevButton) {
-            prevButton.disabled = current === 0;
+            prevButton.disabled = visibleIndex <= 0;
           }
           if (nextButton) {
-            const total = panels.length;
-            const isLast = current >= total - 1;
+            const isLast = visibleIndex >= visiblePanels.length - 1;
             const labelFn = workflowOptions.nextLabel ?? ((stepIndex, totalSteps) => undefined);
-            const computedLabel = typeof labelFn === "function" ? labelFn(current, total) : undefined;
+            const computedLabel =
+              typeof labelFn === "function" ? labelFn(visibleIndex, visiblePanels.length) : undefined;
             let label = typeof computedLabel === "string" ? computedLabel : "Next";
             nextButton.disabled = isLast;
             if (isLast && typeof computedLabel !== "string") {
@@ -734,7 +1274,7 @@
             return current;
           },
           get maxVisited() {
-            return maxVisited;
+            return maxVisitedVisible;
           },
         };
       }
@@ -742,6 +1282,12 @@
       window.addEventListener("DOMContentLoaded", () => {
         const elements = {
           tabPanels: requireElement("tab-panels"),
+          advancedSettingsLayer: requireElement("advanced-settings-layer"),
+          advancedSettings: requireElement("advanced-settings"),
+          advancedToggle: requireElement("advanced-enable"),
+          advancedThreshold: requireElement("advanced-threshold"),
+          advancedTotal: requireElement("advanced-total"),
+          advancedSummary: requireElement("advanced-summary"),
           encryptPassphrase: requireElement("encrypt-passphrase"),
           encryptPassphraseConfirm: requireElement("encrypt-passphrase-confirm"),
           decryptPassphrase: requireElement("decrypt-passphrase"),
@@ -754,8 +1300,37 @@
           pasteCiphertextBtn: requireElement("paste-ciphertext-btn"),
           readNfcBtn: requireElement("read-nfc-btn"),
           writeNfcBtn: requireElement("write-nfc-btn"),
+          shamirStepPanel: requireElement("encrypt-step-4"),
+          shamirStepMessage: requireElement("shamir-step-message"),
+          shamirEncryptSection: requireElement("shamir-encrypt-section"),
+          shamirShareList: requireElement("shamir-share-list"),
+          shamirDecryptStep: requireElement("decrypt-step-0"),
+          shamirDecryptSection: requireElement("shamir-decrypt-section"),
+          shamirShareInput: requireElement("shamir-share-input"),
+          shamirAddShareBtn: requireElement("shamir-add-share-btn"),
+          shamirClearSharesBtn: requireElement("shamir-clear-shares-btn"),
+          shamirCollectedShares: requireElement("shamir-collected-shares"),
+          shamirSharesNeeded: requireElement("shamir-shares-needed"),
+          shamirUploadBtn: requireElement("shamir-upload-btn"),
+          shamirUploadInput: requireElement("shamir-upload-input"),
+          shamirReadShareNfcBtn: requireElement("shamir-read-share-nfc-btn"),
+          shamirDecryptHelper: requireElement("shamir-decrypt-helper"),
           status: requireElement("status"),
         };
+
+        const advancedState = {
+          enabled: false,
+          threshold: SHAMIR_DEFAULT_THRESHOLD,
+          total: SHAMIR_DEFAULT_TOTAL,
+          lastShares: null,
+          decrypt: {
+            shares: [],
+            meta: null,
+            combined: false,
+          },
+        };
+
+        const hasNfc = "NDEFReader" in window;
 
         const workflows = {
           encrypt: initWorkflow("workflow-encrypt", {
@@ -774,12 +1349,13 @@
           }),
           decrypt: initWorkflow("workflow-decrypt", {
             nextLabel: (stepIndex, totalSteps) => {
-              if (stepIndex === 1) return "Decrypt";
+              if (stepIndex === totalSteps - 2) return "Decrypt";
               if (stepIndex >= totalSteps - 1) return "Done";
               return "Next";
             },
-            onNext: ({ currentStep, nextButton }) => {
-              if (currentStep === 1) {
+            onNext: ({ currentStep, nextButton, panels }) => {
+              const activePanel = panels[currentStep];
+              if (activePanel?.id === "decrypt-step-2") {
                 handleDecrypt({ triggerButton: nextButton });
                 return true;
               }
@@ -791,6 +1367,73 @@
         const tabButtons = Array.from(document.querySelectorAll("[data-tab-target]"));
         const tabPanels = Array.from(elements.tabPanels.querySelectorAll(".tab-panel"));
         let activeTab = elements.tabPanels.dataset.activeTab || "encrypt";
+        const settingsButtons = Array.from(document.querySelectorAll("[data-settings-trigger]"));
+        let settingsPanelOpen = false;
+        let lastSettingsTrigger = null;
+
+        function positionSettingsPanel(trigger) {
+          const panel = elements.advancedSettings;
+          if (!panel) return;
+          const reference = trigger instanceof HTMLElement ? trigger : null;
+          panel.style.visibility = "hidden";
+          panel.style.top = "0px";
+          panel.style.left = "0px";
+          requestAnimationFrame(() => {
+            if (!settingsPanelOpen) return;
+            const panelRect = panel.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            const targetRect = reference?.getBoundingClientRect() ?? null;
+            let top = viewportHeight / 2 - panelRect.height / 2;
+            let left = viewportWidth / 2 - panelRect.width / 2;
+            if (targetRect) {
+              top = targetRect.bottom + 12;
+              left = targetRect.left + targetRect.width / 2 - panelRect.width / 2;
+            }
+            top = Math.min(
+              Math.max(16, top),
+              viewportHeight - panelRect.height - 16,
+            );
+            left = Math.min(
+              Math.max(16, left),
+              viewportWidth - panelRect.width - 16,
+            );
+            const pointerCenter = targetRect
+              ? targetRect.left + targetRect.width / 2
+              : left + panelRect.width / 2;
+            const pointerOffset = Math.max(
+              18,
+              Math.min(panelRect.width - 18, pointerCenter - left),
+            );
+            panel.style.setProperty("--pointer-offset", `${Math.round(pointerOffset)}px`);
+            panel.style.top = `${Math.round(top)}px`;
+            panel.style.left = `${Math.round(left)}px`;
+            panel.style.visibility = "visible";
+          });
+        }
+
+        function setSettingsPanelVisible(visible, options = {}) {
+          settingsPanelOpen = Boolean(visible);
+          elements.advancedSettingsLayer.hidden = !settingsPanelOpen;
+          elements.advancedSettingsLayer.classList.toggle("is-open", settingsPanelOpen);
+          elements.advancedSettings.hidden = !settingsPanelOpen;
+          elements.advancedSettings.setAttribute("aria-hidden", settingsPanelOpen ? "false" : "true");
+          settingsButtons.forEach((button) => {
+            button.setAttribute("aria-expanded", settingsPanelOpen ? "true" : "false");
+          });
+          if (settingsPanelOpen) {
+            positionSettingsPanel(options.trigger ?? lastSettingsTrigger);
+            elements.advancedSettings.focus();
+          } else {
+            elements.advancedSettings.style.visibility = "";
+            elements.advancedSettings.style.top = "";
+            elements.advancedSettings.style.left = "";
+            elements.advancedSettings.style.removeProperty("--pointer-offset");
+            if (lastSettingsTrigger instanceof HTMLElement) {
+              lastSettingsTrigger.focus();
+            }
+          }
+        }
 
         function setStatus(message, tone = "info") {
           elements.status.textContent = message;
@@ -848,6 +1491,454 @@
             return data;
           }
           return "";
+        }
+
+        async function computeDigestBase64(bytes) {
+          const digestBuffer = await crypto.subtle.digest("SHA-256", bytes);
+          return toBase64(new Uint8Array(digestBuffer));
+        }
+
+        function updateAdvancedSummary() {
+          if (advancedState.enabled) {
+            elements.advancedSummary.textContent = `Any ${advancedState.threshold} of ${advancedState.total} keys will unlock the ciphertext.`;
+            elements.shamirDecryptHelper.textContent = `Import any ${advancedState.threshold} of ${advancedState.total} keys to rebuild the encrypted blob automatically.`;
+          } else {
+            elements.advancedSummary.textContent = "Advanced mode off — encryption stays a single JSON blob.";
+            elements.shamirDecryptHelper.textContent =
+              "Import any K of N keys to rebuild the encrypted blob automatically.";
+          }
+          elements.advancedToggle.setAttribute("aria-pressed", advancedState.enabled ? "true" : "false");
+          elements.advancedToggle.textContent = advancedState.enabled
+            ? "Advanced mode on"
+            : "Advanced mode off";
+          elements.advancedThreshold.value = String(advancedState.threshold);
+          elements.advancedTotal.value = String(advancedState.total);
+          settingsButtons.forEach((button) => {
+            button.setAttribute("aria-pressed", advancedState.enabled ? "true" : "false");
+          });
+          if (settingsPanelOpen) {
+            positionSettingsPanel(lastSettingsTrigger);
+          }
+        }
+
+        function updateShamirStepMessage() {
+          if (!advancedState.enabled) {
+            elements.shamirStepMessage.hidden = false;
+            elements.shamirStepMessage.textContent =
+              "Enable advanced mode to split the ciphertext into multiple recovery keys.";
+            return;
+          }
+          const shareCount = advancedState.lastShares?.shares?.length ?? 0;
+          if (shareCount > 0) {
+            const plural = shareCount === 1 ? "" : "s";
+            elements.shamirStepMessage.hidden = false;
+            const meta = advancedState.lastShares ?? {
+              threshold: advancedState.threshold,
+              total: advancedState.total,
+            };
+            elements.shamirStepMessage.textContent = `Generated ${shareCount} recovery key${plural}. Any ${meta.threshold} of ${meta.total} will restore the ciphertext.`;
+          } else {
+            elements.shamirStepMessage.hidden = false;
+            elements.shamirStepMessage.textContent =
+              "Encrypt to generate recovery keys. They will appear below.";
+          }
+        }
+
+        function syncAdvancedInputs(options = {}) {
+          let total = Number.parseInt(elements.advancedTotal.value, 10);
+          let threshold = Number.parseInt(elements.advancedThreshold.value, 10);
+          if (!Number.isFinite(total)) {
+            total = SHAMIR_DEFAULT_TOTAL;
+          }
+          if (!Number.isFinite(threshold)) {
+            threshold = SHAMIR_DEFAULT_THRESHOLD;
+          }
+          total = Math.max(2, Math.min(SHAMIR_MAX_SHARES, total));
+          threshold = Math.max(2, Math.min(SHAMIR_MAX_SHARES, threshold));
+          if (threshold > total) {
+            threshold = total;
+          }
+          advancedState.total = total;
+          advancedState.threshold = threshold;
+          elements.advancedTotal.value = String(total);
+          elements.advancedThreshold.value = String(threshold);
+          updateAdvancedSummary();
+          if (options.report && advancedState.enabled) {
+            setStatus(`Advanced mode set to ${threshold} of ${total} keys.`, "info");
+          }
+        }
+
+        function resetEncryptedShares() {
+          advancedState.lastShares = null;
+          elements.shamirShareList.innerHTML = "";
+          elements.shamirEncryptSection.hidden = true;
+          updateShamirStepMessage();
+        }
+
+        function renderShareCards() {
+          const data = advancedState.lastShares;
+          const container = elements.shamirShareList;
+          container.innerHTML = "";
+          if (!advancedState.enabled || !data) {
+            elements.shamirEncryptSection.hidden = true;
+            updateShamirStepMessage();
+            return;
+          }
+          elements.shamirEncryptSection.hidden = false;
+          data.shares.forEach((share, index) => {
+            const card = document.createElement("article");
+            card.className = "share-card";
+            card.dataset.shareIndex = String(index);
+
+            const header = document.createElement("header");
+            header.textContent = `Key ${share.x} of ${data.total}`;
+            card.appendChild(header);
+
+            const textarea = document.createElement("textarea");
+            textarea.readOnly = true;
+            textarea.value = share.text;
+            card.appendChild(textarea);
+
+            const controls = document.createElement("div");
+            controls.className = "controls";
+
+            const copyBtn = document.createElement("button");
+            copyBtn.type = "button";
+            copyBtn.className = "action-btn secondary";
+            copyBtn.dataset.shareAction = "copy";
+            copyBtn.dataset.shareIndex = String(index);
+            copyBtn.textContent = "Copy";
+            controls.appendChild(copyBtn);
+
+            const downloadBtn = document.createElement("button");
+            downloadBtn.type = "button";
+            downloadBtn.className = "action-btn secondary";
+            downloadBtn.dataset.shareAction = "download";
+            downloadBtn.dataset.shareIndex = String(index);
+            downloadBtn.textContent = "Download as File";
+            controls.appendChild(downloadBtn);
+
+            const nfcBtn = document.createElement("button");
+            nfcBtn.type = "button";
+            nfcBtn.className = "action-btn secondary";
+            nfcBtn.dataset.shareAction = "nfc";
+            nfcBtn.dataset.shareIndex = String(index);
+            nfcBtn.textContent = "Write to NFC";
+            if (!hasNfc) {
+              nfcBtn.disabled = true;
+              nfcBtn.title = "Web NFC is not supported on this device.";
+            }
+            controls.appendChild(nfcBtn);
+
+            card.appendChild(controls);
+            container.appendChild(card);
+          });
+          updateShamirStepMessage();
+        }
+
+        function downloadAsFile(text, filename) {
+          const blob = new Blob([text], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = filename;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }
+
+        async function writeJsonRecordToNfc(payload, messages = {}) {
+          if (!hasNfc) {
+            throw new Error("Web NFC is not supported on this device.");
+          }
+          const progressMessage = messages.progress ?? "Bring an NFC tag close to write…";
+          const successMessage = messages.success ?? "Data written to NFC tag.";
+          if (!payload || !payload.trim()) {
+            throw new Error("Nothing to write to NFC.");
+          }
+          setStatus(progressMessage);
+          const ndef = new NDEFReader();
+          await ndef.write({
+            records: [
+              {
+                recordType: "mime",
+                mediaType: "application/json",
+                data: payload,
+              },
+            ],
+          });
+          setStatus(successMessage, "success");
+        }
+
+        async function readJsonRecordFromNfc(messages = {}) {
+          if (!hasNfc) {
+            throw new Error("Web NFC is not supported on this device.");
+          }
+          const progressMessage = messages.progress ?? "Bring an NFC tag close to read…";
+          setStatus(progressMessage);
+          const ndef = new NDEFReader();
+          const readPromise = new Promise((resolve, reject) => {
+            const onReading = (event) => {
+              try {
+                const records = event.message.records ?? [];
+                if (!records.length) {
+                  reject(new Error("No records found on tag."));
+                  return;
+                }
+                const record = records[0];
+                const payload = dataViewToString(record.data);
+                if (!payload || typeof payload !== "string") {
+                  reject(new Error("No readable data on tag."));
+                  return;
+                }
+                resolve(payload);
+              } catch (err) {
+                reject(err);
+              }
+            };
+            const onError = () => reject(new Error("Failed to read NFC tag."));
+            ndef.addEventListener("reading", onReading, { once: true });
+            ndef.addEventListener("readingerror", onError, { once: true });
+          });
+          await ndef.scan();
+          return await readPromise;
+        }
+
+        async function generateSharesForCiphertext(blobJson) {
+          const bytes = encodeUtf8(blobJson);
+          const shares = shamirSplit(bytes, advancedState.threshold, advancedState.total);
+          const digest = await computeDigestBase64(bytes);
+          const shareEntries = shares.map((share) => {
+            const payload = {
+              version: 1,
+              scheme: "shamir",
+              threshold: advancedState.threshold,
+              total: advancedState.total,
+              digest_b64: digest,
+              x: share.x,
+              data_b64: toBase64(share.y),
+            };
+            return {
+              x: share.x,
+              y: share.y,
+              text: JSON.stringify(payload, null, 2),
+            };
+          });
+          advancedState.lastShares = {
+            threshold: advancedState.threshold,
+            total: advancedState.total,
+            digest,
+            shares: shareEntries,
+          };
+          renderShareCards();
+        }
+
+        function resetDecryptShares() {
+          advancedState.decrypt.shares = [];
+          advancedState.decrypt.meta = null;
+          advancedState.decrypt.combined = false;
+          elements.shamirCollectedShares.innerHTML = "";
+          elements.shamirShareInput.value = "";
+          elements.shamirSharesNeeded.textContent = advancedState.enabled
+            ? "No keys added yet."
+            : "";
+        }
+
+        function renderCollectedShares() {
+          const list = elements.shamirCollectedShares;
+          list.innerHTML = "";
+          advancedState.decrypt.shares
+            .slice()
+            .sort((a, b) => a.x - b.x)
+            .forEach((share) => {
+              const item = document.createElement("li");
+              const label = document.createElement("span");
+              label.textContent = `Key ${share.x} (${share.source ?? "imported"})`;
+              item.appendChild(label);
+
+              const removeBtn = document.createElement("button");
+              removeBtn.type = "button";
+              removeBtn.className = "action-btn secondary";
+              removeBtn.dataset.shareRemove = String(share.x);
+              removeBtn.textContent = "Remove";
+              item.appendChild(removeBtn);
+              list.appendChild(item);
+            });
+        }
+
+        function updateSharesNeededMessage() {
+          if (!advancedState.enabled) {
+            elements.shamirSharesNeeded.textContent = "";
+            return;
+          }
+          const meta = advancedState.decrypt.meta;
+          if (!meta) {
+            elements.shamirSharesNeeded.textContent = "No keys added yet.";
+            return;
+          }
+          const have = advancedState.decrypt.shares.length;
+          if (have === 0) {
+            elements.shamirSharesNeeded.textContent = `Need ${meta.threshold} keys (of ${meta.total}) to restore the encrypted blob.`;
+          } else if (have < meta.threshold) {
+            elements.shamirSharesNeeded.textContent = `Need ${meta.threshold - have} more key(s) to reach the ${meta.threshold} threshold.`;
+          } else {
+            elements.shamirSharesNeeded.textContent =
+              "Enough keys collected. The ciphertext field is populated automatically.";
+          }
+        }
+
+        async function tryCombineShares() {
+          const meta = advancedState.decrypt.meta;
+          if (!meta) return;
+          const shares = advancedState.decrypt.shares;
+          if (shares.length < meta.threshold) {
+            return;
+          }
+          try {
+            const secret = shamirCombine(
+              shares.map((share) => ({
+                x: share.x,
+                y: share.y,
+              })),
+            );
+            const digest = await computeDigestBase64(secret);
+            if (meta.digest && digest !== meta.digest) {
+              throw new Error("Combined keys failed the integrity check.");
+            }
+            const ciphertext = decodeUtf8(secret);
+            setCiphertext(ciphertext);
+            updateSharesNeededMessage();
+            if (!advancedState.decrypt.combined) {
+              setStatus("Collected enough keys. Ciphertext restored.", "success");
+              workflows.decrypt.setStep(2, { force: true });
+            }
+            advancedState.decrypt.combined = true;
+          } catch (err) {
+            console.error(err);
+            setStatus(err instanceof Error ? err.message : "Failed to combine keys.", "error");
+          }
+        }
+
+        function setAdvancedEnabled(enabled) {
+          advancedState.enabled = Boolean(enabled);
+          if (advancedState.enabled) {
+            elements.shamirStepPanel.removeAttribute("data-step-skip");
+            elements.shamirDecryptStep.removeAttribute("data-step-skip");
+          } else {
+            elements.shamirStepPanel.setAttribute("data-step-skip", "");
+            elements.shamirDecryptStep.setAttribute("data-step-skip", "");
+          }
+          elements.shamirEncryptSection.hidden = !advancedState.enabled || !advancedState.lastShares;
+          elements.shamirDecryptSection.hidden = !advancedState.enabled;
+          if (!advancedState.enabled) {
+            resetEncryptedShares();
+            resetDecryptShares();
+          } else {
+            syncAdvancedInputs();
+            updateSharesNeededMessage();
+          }
+          updateAdvancedSummary();
+          updateShamirStepMessage();
+          if (!advancedState.enabled && workflows.encrypt.currentStep > 3) {
+            workflows.encrypt.setStep(3, { force: true });
+          } else {
+            workflows.encrypt.setStep(workflows.encrypt.currentStep, { force: true });
+          }
+          workflows.decrypt.setStep(0, { force: true });
+        }
+
+        function parseShareString(raw) {
+          const trimmed = (raw ?? "").trim();
+          if (!trimmed) {
+            throw new Error("Key input is empty.");
+          }
+          let payload;
+          try {
+            payload = JSON.parse(trimmed);
+          } catch {
+            throw new Error("Key is not valid JSON.");
+          }
+          if (payload.version !== 1) {
+            throw new Error("Unsupported key version.");
+          }
+          if (payload.scheme !== "shamir") {
+            throw new Error("Unsupported key scheme.");
+          }
+          const threshold = Number(payload.threshold);
+          const total = Number(payload.total);
+          const x = Number(payload.x);
+          if (!Number.isInteger(threshold) || threshold < 2) {
+            throw new Error("Key threshold is invalid.");
+          }
+          if (!Number.isInteger(total) || total < threshold) {
+            throw new Error("Key total is invalid.");
+          }
+          if (!Number.isInteger(x) || x <= 0 || x > 255) {
+            throw new Error("Key index is out of range.");
+          }
+          if (typeof payload.data_b64 !== "string") {
+            throw new Error("Key is missing share data.");
+          }
+          const data = fromBase64(payload.data_b64);
+          if (!(data instanceof Uint8Array)) {
+            throw new Error("Key data is invalid.");
+          }
+          const digest = typeof payload.digest_b64 === "string" ? payload.digest_b64 : null;
+          return { x, threshold, total, digest, y: data, text: trimmed };
+        }
+
+        async function addShareFromString(raw, source) {
+          try {
+            const parsed = parseShareString(raw);
+            const meta = advancedState.decrypt.meta;
+            if (meta) {
+              if (meta.threshold !== parsed.threshold || meta.total !== parsed.total) {
+                throw new Error("Key thresholds do not match previously added keys.");
+              }
+              if (meta.digest && parsed.digest && meta.digest !== parsed.digest) {
+                throw new Error("Key digest does not match previously added keys.");
+              }
+              if (!meta.digest && parsed.digest) {
+                meta.digest = parsed.digest;
+              }
+            } else {
+              advancedState.decrypt.meta = {
+                threshold: parsed.threshold,
+                total: parsed.total,
+                digest: parsed.digest ?? null,
+              };
+            }
+            if (advancedState.decrypt.shares.some((share) => share.x === parsed.x)) {
+              throw new Error(`Key ${parsed.x} already added.`);
+            }
+            advancedState.decrypt.shares.push({
+              x: parsed.x,
+              y: parsed.y,
+              text: parsed.text,
+              source: source ?? "imported",
+            });
+            advancedState.decrypt.combined = false;
+            renderCollectedShares();
+            updateSharesNeededMessage();
+            setStatus(`Key ${parsed.x} added.`, "success");
+            await tryCombineShares();
+          } catch (err) {
+            console.error(err);
+            setStatus(err instanceof Error ? err.message : "Failed to add key.", "error");
+          }
+        }
+
+        function removeShareByX(x) {
+          const index = advancedState.decrypt.shares.findIndex((share) => share.x === x);
+          if (index === -1) return;
+          advancedState.decrypt.shares.splice(index, 1);
+          if (advancedState.decrypt.shares.length === 0) {
+            advancedState.decrypt.meta = null;
+          }
+          advancedState.decrypt.combined = false;
+          renderCollectedShares();
+          updateSharesNeededMessage();
         }
 
         function parseIterations(value) {
@@ -1014,6 +2105,195 @@
 
         setTab(activeTab);
 
+        settingsButtons.forEach((button) => {
+          button.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            lastSettingsTrigger = button;
+            setSettingsPanelVisible(!settingsPanelOpen, { trigger: button });
+          });
+        });
+
+        document.addEventListener("click", (event) => {
+          if (!settingsPanelOpen) return;
+          const target = event.target;
+          if (!(target instanceof Node)) return;
+          const interactingWithTrigger = settingsButtons.some(
+            (button) => button === target || button.contains(target),
+          );
+          if (interactingWithTrigger) {
+            return;
+          }
+          if (!elements.advancedSettings.contains(target)) {
+            setSettingsPanelVisible(false);
+          }
+        });
+
+        elements.advancedSettingsLayer.addEventListener("click", (event) => {
+          if (event.target === elements.advancedSettingsLayer) {
+            setSettingsPanelVisible(false);
+          }
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && settingsPanelOpen) {
+            setSettingsPanelVisible(false);
+          }
+        });
+
+        const repositionSettingsPanel = () => {
+          if (settingsPanelOpen) {
+            positionSettingsPanel(lastSettingsTrigger);
+          }
+        };
+        window.addEventListener("resize", repositionSettingsPanel);
+        window.addEventListener("scroll", repositionSettingsPanel, true);
+
+        setSettingsPanelVisible(false);
+        syncAdvancedInputs();
+        setAdvancedEnabled(false);
+
+        elements.advancedToggle.addEventListener("click", () => {
+          setAdvancedEnabled(!advancedState.enabled);
+        });
+
+        const advancedInputHandler = () => syncAdvancedInputs({ report: advancedState.enabled });
+        elements.advancedThreshold.addEventListener("change", advancedInputHandler);
+        elements.advancedTotal.addEventListener("change", advancedInputHandler);
+        elements.advancedThreshold.addEventListener("input", () => syncAdvancedInputs());
+        elements.advancedTotal.addEventListener("input", () => syncAdvancedInputs());
+
+        elements.shamirShareList.addEventListener("click", async (event) => {
+          const target = event.target;
+          if (!(target instanceof HTMLElement)) return;
+          const button = target.closest("[data-share-action]");
+          if (!(button instanceof HTMLElement)) return;
+          if (!advancedState.enabled) {
+            setStatus("Enable advanced mode to use split keys.", "error");
+            return;
+          }
+          const index = Number.parseInt(button.dataset.shareIndex ?? "", 10);
+          if (!Number.isInteger(index) || index < 0) return;
+          const shareData = advancedState.lastShares?.shares?.[index];
+          if (!shareData) return;
+          const action = button.dataset.shareAction;
+          try {
+            if (action === "copy") {
+              await navigator.clipboard.writeText(shareData.text);
+              setStatus(`Key ${shareData.x} copied to clipboard.`, "success");
+            } else if (action === "download") {
+              downloadAsFile(
+                shareData.text,
+                `recoveryware-key-${shareData.x}-of-${advancedState.lastShares.total}.json`,
+              );
+              setStatus(`Key ${shareData.x} downloaded.`, "success");
+            } else if (action === "nfc") {
+              await writeJsonRecordToNfc(shareData.text, {
+                progress: `Bring an NFC tag close to write key ${shareData.x}…`,
+                success: `Key ${shareData.x} written to NFC.`,
+              });
+            }
+          } catch (err) {
+            console.error(err);
+            setStatus(
+              err instanceof Error ? err.message : "Failed to process key action.",
+              "error",
+            );
+          }
+        });
+
+        elements.shamirAddShareBtn.addEventListener("click", async () => {
+          if (!advancedState.enabled) {
+            setStatus("Enable advanced mode to import keys.", "error");
+            return;
+          }
+          const raw = elements.shamirShareInput.value;
+          if (!raw.trim()) {
+            setStatus("Paste a key JSON blob first.", "error");
+            return;
+          }
+          await addShareFromString(raw, "pasted");
+          elements.shamirShareInput.value = "";
+        });
+
+        elements.shamirClearSharesBtn.addEventListener("click", () => {
+          if (!advancedState.enabled) return;
+          const hadShares = advancedState.decrypt.shares.length > 0;
+          resetDecryptShares();
+          if (hadShares) {
+            setStatus("Cleared imported keys.", "info");
+          }
+        });
+
+        elements.shamirUploadBtn.addEventListener("click", () => {
+          if (!advancedState.enabled) {
+            setStatus("Enable advanced mode to import keys.", "error");
+            return;
+          }
+          elements.shamirUploadInput.click();
+        });
+
+        elements.shamirUploadInput.addEventListener("change", async () => {
+          if (!advancedState.enabled) {
+            elements.shamirUploadInput.value = "";
+            return;
+          }
+          const files = Array.from(elements.shamirUploadInput.files ?? []);
+          elements.shamirUploadInput.value = "";
+          if (!files.length) return;
+          for (const file of files) {
+            try {
+              const text = await file.text();
+              await addShareFromString(text, file.name || "file");
+            } catch (err) {
+              console.error(err);
+              setStatus(
+                err instanceof Error ? `${file.name}: ${err.message}` : "Failed to import key file.",
+                "error",
+              );
+            }
+          }
+        });
+
+        elements.shamirReadShareNfcBtn.addEventListener("click", async () => {
+          if (!advancedState.enabled) {
+            setStatus("Enable advanced mode to import keys.", "error");
+            return;
+          }
+          if (!hasNfc) {
+            setStatus("Web NFC not supported on this device.", "error");
+            return;
+          }
+          try {
+            const payload = await readJsonRecordFromNfc({
+              progress: "Bring an NFC tag close to read a key…",
+            });
+            await addShareFromString(payload, "NFC");
+          } catch (err) {
+            console.error(err);
+            setStatus(
+              err instanceof Error ? err.message : "Failed to read key from NFC.",
+              "error",
+            );
+          }
+        });
+
+        elements.shamirCollectedShares.addEventListener("click", (event) => {
+          const target = event.target;
+          if (!(target instanceof HTMLElement)) return;
+          const button = target.closest("[data-share-remove]");
+          if (!(button instanceof HTMLElement)) return;
+          const x = Number.parseInt(button.dataset.shareRemove ?? "", 10);
+          if (!Number.isInteger(x)) return;
+          removeShareByX(x);
+          if (advancedState.decrypt.shares.length === 0) {
+            setStatus("Removed key. No keys remaining.", "info");
+          } else {
+            setStatus(`Removed key ${x}.`, "info");
+            tryCombineShares();
+          }
+        });
+
         async function handleEncrypt(options = {}) {
           const triggerButton = options.triggerButton ?? null;
           const originalLabel = triggerButton?.textContent;
@@ -1031,8 +2311,15 @@
             const plaintext = elements.encryptPlaintext.value;
             const blobJson = await encryptPlaintext(plaintext, passphrase, iterations);
             setCiphertext(blobJson);
-            workflows.encrypt.setStep(3, { force: true });
-            setStatus("Encryption complete.", "success");
+            if (advancedState.enabled) {
+              await generateSharesForCiphertext(blobJson);
+              setStatus("Encryption complete. Generated split keys.", "success");
+            } else {
+              resetEncryptedShares();
+              setStatus("Encryption complete.", "success");
+            }
+            const targetStep = advancedState.enabled ? 4 : 3;
+            workflows.encrypt.setStep(targetStep, { force: true });
             shouldRestoreButton = false;
           } catch (err) {
             console.error(err);
@@ -1068,7 +2355,7 @@
             const plaintext = await decryptBlob(blobJson, passphrase);
             elements.decryptPlaintext.value = plaintext;
             elements.encryptPlaintext.value = plaintext;
-            workflows.decrypt.setStep(2, { force: true });
+            workflows.decrypt.setStep(3, { force: true });
             setStatus("Decryption complete.", "success");
             shouldRestoreButton = false;
           } catch (err) {
@@ -1085,7 +2372,7 @@
         }
 
         async function handleWriteNfc() {
-          if (!("NDEFReader" in window)) {
+          if (!hasNfc) {
             setStatus("Web NFC not supported on this device.", "error");
             return;
           }
@@ -1095,18 +2382,10 @@
             return;
           }
           try {
-            setStatus("Bring an NFC tag close to write…");
-            const ndef = new NDEFReader();
-            await ndef.write({
-              records: [
-                {
-                  recordType: "mime",
-                  mediaType: "application/json",
-                  data: blobJson,
-                },
-              ],
+            await writeJsonRecordToNfc(blobJson, {
+              progress: "Bring an NFC tag close to write…",
+              success: "Encrypted blob written to NFC tag.",
             });
-            setStatus("Encrypted blob written to NFC tag.", "success");
           } catch (err) {
             console.error(err);
             setStatus(err instanceof Error ? err.message : "Failed to write to NFC.", "error");
@@ -1146,37 +2425,14 @@
         });
 
         async function handleReadNfc() {
-          if (!("NDEFReader" in window)) {
+          if (!hasNfc) {
             setStatus("Web NFC not supported on this device.", "error");
             return;
           }
           try {
-            setStatus("Bring an NFC tag close to read…");
-            const ndef = new NDEFReader();
-            const readPromise = new Promise((resolve, reject) => {
-              const onReading = (event) => {
-                try {
-                  const records = event.message.records;
-                  if (!records.length) {
-                    reject(new Error("No records found on tag."));
-                    return;
-                  }
-                  const record = records[0];
-                  const payload = dataViewToString(record.data);
-                  resolve(payload);
-                } catch (err) {
-                  reject(err);
-                }
-              };
-              const onError = () => reject(new Error("Failed to read NFC tag."));
-              ndef.addEventListener("reading", onReading, { once: true });
-              ndef.addEventListener("readingerror", onError, { once: true });
+            const payload = await readJsonRecordFromNfc({
+              progress: "Bring an NFC tag close to read…",
             });
-            await ndef.scan();
-            const payload = await readPromise;
-            if (!payload || typeof payload !== "string") {
-              throw new Error("No readable data on tag.");
-            }
             setCiphertext(payload);
             setTab("decrypt");
             workflows.decrypt.setStep(1, { force: true });
@@ -1190,11 +2446,14 @@
         elements.writeNfcBtn.addEventListener("click", handleWriteNfc);
         elements.readNfcBtn.addEventListener("click", handleReadNfc);
 
-        if (!("NDEFReader" in window)) {
+        if (!hasNfc) {
           elements.writeNfcBtn.disabled = true;
           elements.writeNfcBtn.title = "Web NFC is only available on supported Android browsers.";
           elements.readNfcBtn.disabled = true;
           elements.readNfcBtn.title = "Web NFC is only available on supported Android browsers.";
+          elements.shamirReadShareNfcBtn.disabled = true;
+          elements.shamirReadShareNfcBtn.title =
+            "Web NFC is only available on supported Android browsers.";
         }
 
         setStatus("Ready.");
