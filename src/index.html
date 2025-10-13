@@ -820,28 +820,14 @@
               </div>
               <div class="step-panels">
                 <section
-                  class="step-panel step-panel--active"
+                  class="step-panel"
                   id="decrypt-step-0"
                   data-step-panel="0"
-                  data-step-name="Load encrypted blob"
-                  aria-hidden="false"
+                  data-step-name="Collect Shamir keys"
+                  hidden
+                  aria-hidden="true"
+                  data-step-skip
                 >
-                  <label>
-                    Encrypted blob JSON
-                    <textarea
-                      id="ciphertext-decrypt"
-                      rows="8"
-                      placeholder='{"version":1,"kdf":"PBKDF2",...}'
-                    ></textarea>
-                  </label>
-                  <div class="controls">
-                    <button id="paste-ciphertext-btn" type="button" class="action-btn secondary">
-                      Paste from clipboard
-                    </button>
-                    <button id="read-nfc-btn" type="button" class="action-btn secondary">
-                      Read from NFC
-                    </button>
-                  </div>
                   <div id="shamir-decrypt-section" class="shamir-section" hidden>
                     <h3>Collect Shamir keys</h3>
                     <p id="shamir-decrypt-helper" class="helper-text">
@@ -877,9 +863,34 @@
                 </section>
 
                 <section
-                  class="step-panel"
+                  class="step-panel step-panel--active"
                   id="decrypt-step-1"
                   data-step-panel="1"
+                  data-step-name="Load encrypted blob"
+                  aria-hidden="false"
+                >
+                  <label>
+                    Encrypted blob JSON
+                    <textarea
+                      id="ciphertext-decrypt"
+                      rows="8"
+                      placeholder='{"version":1,"kdf":"PBKDF2",...}'
+                    ></textarea>
+                  </label>
+                  <div class="controls">
+                    <button id="paste-ciphertext-btn" type="button" class="action-btn secondary">
+                      Paste from clipboard
+                    </button>
+                    <button id="read-nfc-btn" type="button" class="action-btn secondary">
+                      Read from NFC
+                    </button>
+                  </div>
+                </section>
+
+                <section
+                  class="step-panel"
+                  id="decrypt-step-2"
+                  data-step-panel="2"
                   data-step-name="Passphrase (if any)"
                   hidden
                   aria-hidden="true"
@@ -892,8 +903,8 @@
 
                 <section
                   class="step-panel"
-                  id="decrypt-step-2"
-                  data-step-panel="2"
+                  id="decrypt-step-3"
+                  data-step-panel="3"
                   data-step-name="Plain text"
                   hidden
                   aria-hidden="true"
@@ -1293,6 +1304,7 @@
           shamirStepMessage: requireElement("shamir-step-message"),
           shamirEncryptSection: requireElement("shamir-encrypt-section"),
           shamirShareList: requireElement("shamir-share-list"),
+          shamirDecryptStep: requireElement("decrypt-step-0"),
           shamirDecryptSection: requireElement("shamir-decrypt-section"),
           shamirShareInput: requireElement("shamir-share-input"),
           shamirAddShareBtn: requireElement("shamir-add-share-btn"),
@@ -1337,12 +1349,13 @@
           }),
           decrypt: initWorkflow("workflow-decrypt", {
             nextLabel: (stepIndex, totalSteps) => {
-              if (stepIndex === 1) return "Decrypt";
+              if (stepIndex === totalSteps - 2) return "Decrypt";
               if (stepIndex >= totalSteps - 1) return "Done";
               return "Next";
             },
-            onNext: ({ currentStep, nextButton }) => {
-              if (currentStep === 1) {
+            onNext: ({ currentStep, nextButton, panels }) => {
+              const activePanel = panels[currentStep];
+              if (activePanel?.id === "decrypt-step-2") {
                 handleDecrypt({ triggerButton: nextButton });
                 return true;
               }
@@ -1798,7 +1811,7 @@
             updateSharesNeededMessage();
             if (!advancedState.decrypt.combined) {
               setStatus("Collected enough keys. Ciphertext restored.", "success");
-              workflows.decrypt.setStep(1, { force: true });
+              workflows.decrypt.setStep(2, { force: true });
             }
             advancedState.decrypt.combined = true;
           } catch (err) {
@@ -1811,8 +1824,10 @@
           advancedState.enabled = Boolean(enabled);
           if (advancedState.enabled) {
             elements.shamirStepPanel.removeAttribute("data-step-skip");
+            elements.shamirDecryptStep.removeAttribute("data-step-skip");
           } else {
             elements.shamirStepPanel.setAttribute("data-step-skip", "");
+            elements.shamirDecryptStep.setAttribute("data-step-skip", "");
           }
           elements.shamirEncryptSection.hidden = !advancedState.enabled || !advancedState.lastShares;
           elements.shamirDecryptSection.hidden = !advancedState.enabled;
@@ -1830,6 +1845,7 @@
           } else {
             workflows.encrypt.setStep(workflows.encrypt.currentStep, { force: true });
           }
+          workflows.decrypt.setStep(0, { force: true });
         }
 
         function parseShareString(raw) {
@@ -2339,7 +2355,7 @@
             const plaintext = await decryptBlob(blobJson, passphrase);
             elements.decryptPlaintext.value = plaintext;
             elements.encryptPlaintext.value = plaintext;
-            workflows.decrypt.setStep(2, { force: true });
+            workflows.decrypt.setStep(3, { force: true });
             setStatus("Decryption complete.", "success");
             shouldRestoreButton = false;
           } catch (err) {
