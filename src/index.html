@@ -230,6 +230,14 @@
         margin: 0;
         line-height: 1.65;
       }
+      .faq-card a {
+        color: #93c5fd;
+        text-decoration: none;
+      }
+      .faq-card a:hover,
+      .faq-card a:focus-visible {
+        text-decoration: underline;
+      }
       .action-btn {
         background: linear-gradient(135deg, #6366f1, #0ea5e9);
         color: #0a0c12;
@@ -598,6 +606,13 @@
                 <p>
                   Use “View Source” or your dev tools to inspect the single HTML file. What you see there is exactly
                   what runs.
+                </p>
+              </article>
+              <article class="faq-card">
+                <h3>How do I write to NFC tags?</h3>
+                <p>
+                  Web NFC works today only on Android in supported Chromium browsers (Chrome, Edge, or equivalents).
+                  iPhone users should copy the encrypted JSON and write it with <a href="https://apps.apple.com/en/app/nfc-tools/id1252962749" target="_blank" rel="noreferrer">NFC Tools</a>.
                 </p>
               </article>
             </div>
