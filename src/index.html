@@ -415,9 +415,6 @@
                     />
                   </label>
                   <p class="helper-text">Defaults to 600,000 iterations for a balanced KDF. Higher counts strengthen brute-force resistance at the cost of speed.</p>
-                  <div class="controls">
-                    <button id="encrypt-btn" type="button" class="action-btn">Encrypt</button>
-                  </div>
                 </section>
 
                 <section
@@ -507,9 +504,6 @@
                     Passphrase
                     <input id="decrypt-passphrase" type="password" autocomplete="current-password" />
                   </label>
-                  <div class="controls">
-                    <button id="decrypt-btn" type="button" class="action-btn">Decrypt</button>
-                  </div>
                 </section>
 
                 <section
@@ -553,7 +547,7 @@
         return el;
       }
 
-      function initWorkflow(id) {
+      function initWorkflow(id, workflowOptions = {}) {
         const root = requireElement(id);
         const panels = Array.from(root.querySelectorAll("[data-step-panel]"));
         const toolbar = root.querySelector(".step-toolbar");
@@ -593,12 +587,34 @@
             prevButton.disabled = current === 0;
           }
           if (nextButton) {
-            nextButton.disabled = current >= panels.length - 1;
+            const total = panels.length;
+            const isLast = current >= total - 1;
+            const labelFn = workflowOptions.nextLabel ?? ((stepIndex, totalSteps) => undefined);
+            const computedLabel = typeof labelFn === "function" ? labelFn(current, total) : undefined;
+            let label = typeof computedLabel === "string" ? computedLabel : "Next";
+            nextButton.disabled = isLast;
+            if (isLast && typeof computedLabel !== "string") {
+              label = "Done";
+            }
+            nextButton.textContent = label;
           }
         }
 
         if (nextButton) {
           nextButton.addEventListener("click", () => {
+            if (typeof workflowOptions.onNext === "function") {
+              const handled = workflowOptions.onNext({
+                currentStep: current,
+                setStep,
+                panels,
+                nextButton,
+                prevButton,
+                root,
+              });
+              if (handled === true) {
+                return;
+              }
+            }
             setStep(current + 1);
           });
         }
@@ -633,8 +649,6 @@
           ciphertextEncrypt: requireElement("ciphertext-encrypt"),
           ciphertextDecrypt: requireElement("ciphertext-decrypt"),
           decryptPlaintext: requireElement("decrypt-plaintext"),
-          encryptBtn: requireElement("encrypt-btn"),
-          decryptBtn: requireElement("decrypt-btn"),
           copyCiphertextBtn: requireElement("copy-ciphertext-btn"),
           pasteCiphertextBtn: requireElement("paste-ciphertext-btn"),
           readNfcBtn: requireElement("read-nfc-btn"),
@@ -643,8 +657,34 @@
         };
 
         const workflows = {
-          encrypt: initWorkflow("workflow-encrypt"),
-          decrypt: initWorkflow("workflow-decrypt"),
+          encrypt: initWorkflow("workflow-encrypt", {
+            nextLabel: (stepIndex, totalSteps) => {
+              if (stepIndex === 2) return "Encrypt";
+              if (stepIndex >= totalSteps - 1) return "Done";
+              return "Next";
+            },
+            onNext: ({ currentStep, nextButton }) => {
+              if (currentStep === 2) {
+                handleEncrypt({ triggerButton: nextButton });
+                return true;
+              }
+              return false;
+            },
+          }),
+          decrypt: initWorkflow("workflow-decrypt", {
+            nextLabel: (stepIndex, totalSteps) => {
+              if (stepIndex === 1) return "Decrypt";
+              if (stepIndex >= totalSteps - 1) return "Done";
+              return "Next";
+            },
+            onNext: ({ currentStep, nextButton }) => {
+              if (currentStep === 1) {
+                handleDecrypt({ triggerButton: nextButton });
+                return true;
+              }
+              return false;
+            },
+          }),
         };
 
         const tabButtons = Array.from(document.querySelectorAll("[data-tab-target]"));
@@ -873,7 +913,16 @@
 
         setTab(activeTab);
 
-        async function handleEncrypt() {
+        async function handleEncrypt(options = {}) {
+          const triggerButton = options.triggerButton ?? null;
+          const originalLabel = triggerButton?.textContent;
+          let shouldRestoreButton = Boolean(triggerButton);
+          if (triggerButton) {
+            triggerButton.disabled = true;
+            if (originalLabel) {
+              triggerButton.textContent = "Encrypting…";
+            }
+          }
           try {
             setStatus("Encrypting…");
             const passphrase = getPassphraseForEncrypt();
@@ -883,13 +932,34 @@
             setCiphertext(blobJson);
             workflows.encrypt.setStep(3, { force: true });
             setStatus("Encryption complete.", "success");
+            shouldRestoreButton = false;
           } catch (err) {
             console.error(err);
             setStatus(err instanceof Error ? err.message : String(err), "error");
+          } finally {
+            if (triggerButton && shouldRestoreButton) {
+              triggerButton.disabled = false;
+              if (originalLabel) {
+                triggerButton.textContent = originalLabel;
+              }
+            }
           }
         }
 
-        async function handleDecrypt() {
+        async function handleDecrypt(options = {}) {
+          if (options instanceof Event) {
+            options.preventDefault?.();
+            options = {};
+          }
+          const triggerButton = options.triggerButton ?? null;
+          const originalLabel = triggerButton?.textContent;
+          let shouldRestoreButton = Boolean(triggerButton);
+          if (triggerButton) {
+            triggerButton.disabled = true;
+            if (originalLabel) {
+              triggerButton.textContent = "Decrypting…";
+            }
+          }
           try {
             setStatus("Decrypting…");
             const passphrase = getPassphraseForDecrypt();
@@ -899,9 +969,17 @@
             elements.encryptPlaintext.value = plaintext;
             workflows.decrypt.setStep(2, { force: true });
             setStatus("Decryption complete.", "success");
+            shouldRestoreButton = false;
           } catch (err) {
             console.error(err);
             setStatus(err instanceof Error ? err.message : String(err), "error");
+          } finally {
+            if (triggerButton && shouldRestoreButton) {
+              triggerButton.disabled = false;
+              if (originalLabel) {
+                triggerButton.textContent = originalLabel;
+              }
+            }
           }
         }
 
@@ -934,8 +1012,6 @@
           }
         }
 
-        elements.encryptBtn.addEventListener("click", handleEncrypt);
-        elements.decryptBtn.addEventListener("click", handleDecrypt);
         elements.copyCiphertextBtn.addEventListener("click", async () => {
           const data = elements.ciphertextEncrypt.value.trim();
           if (!data) {
