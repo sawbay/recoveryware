@@ -1659,12 +1659,13 @@
           }
           setStatus(progressMessage);
           const ndef = new NDEFReader();
+          const data = encodeUtf8(payload);
           await ndef.write({
             records: [
               {
                 recordType: "mime",
                 mediaType: "application/json",
-                data: payload,
+                data,
               },
             ],
           });
