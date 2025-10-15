@@ -884,6 +884,9 @@
                     <button id="copy-ciphertext-btn" type="button" class="action-btn secondary">
                       Copy JSON
                     </button>
+                    <button id="download-ciphertext-btn" type="button" class="action-btn secondary">
+                      Download JSON
+                    </button>
                     <button id="write-nfc-btn" type="button" class="action-btn secondary">
                       Write to NFC
                     </button>
@@ -1428,6 +1431,7 @@
           ciphertextDecrypt: requireElement("ciphertext-decrypt"),
           decryptPlaintext: requireElement("decrypt-plaintext"),
           copyCiphertextBtn: requireElement("copy-ciphertext-btn"),
+          downloadCiphertextBtn: requireElement("download-ciphertext-btn"),
           pasteCiphertextBtn: requireElement("paste-ciphertext-btn"),
           readNfcBtn: requireElement("read-nfc-btn"),
           writeNfcBtn: requireElement("write-nfc-btn"),
@@ -2762,6 +2766,21 @@
           } catch (err) {
             console.error(err);
             setStatus("Clipboard write failed. Copy manually.", "error");
+          }
+        });
+
+        elements.downloadCiphertextBtn.addEventListener("click", () => {
+          const data = elements.ciphertextEncrypt.value.trim();
+          if (!data) {
+            setStatus("No encrypted data to download.", "error");
+            return;
+          }
+          try {
+            downloadAsFile(data, "recoveryware-encrypted.json");
+            setStatus("Encrypted blob downloaded.", "success");
+          } catch (err) {
+            console.error(err);
+            setStatus("Download failed. Copy manually.", "error");
           }
         });
 
