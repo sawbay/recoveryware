@@ -554,6 +554,107 @@
         text-align: center;
         backdrop-filter: blur(24px);
         box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.35);
+        margin: 1rem 0 0;
+      }
+      #nfc-dialog-layer {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(16px);
+        z-index: 2000;
+      }
+      #nfc-dialog-layer[hidden] {
+        display: none;
+      }
+      #nfc-dialog {
+        background: rgba(15, 23, 42, 0.95);
+        border-radius: 20px;
+        padding: 1.75rem;
+        width: min(26rem, 100%);
+        display: grid;
+        gap: 1.25rem;
+        box-shadow: 0 28px 60px rgba(15, 23, 42, 0.45);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        color: #e2e8f0;
+        outline: none;
+      }
+      .nfc-dialog-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+      #nfc-dialog-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #f8fafc;
+        margin: 0;
+      }
+      .nfc-dialog-close {
+        background: transparent;
+        border: none;
+        color: rgba(226, 232, 240, 0.8);
+        font-size: 1.6rem;
+        line-height: 1;
+        cursor: pointer;
+        padding: 0.2rem;
+      }
+      .nfc-dialog-close:hover,
+      .nfc-dialog-close:focus-visible {
+        color: #f8fafc;
+      }
+      .nfc-dialog-close[hidden] {
+        display: none;
+      }
+      .nfc-dialog-body {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .nfc-dialog-spinner {
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        border: 3px solid rgba(148, 163, 184, 0.25);
+        border-top-color: rgba(59, 130, 246, 0.75);
+        animation: nfc-spin 1s linear infinite;
+        display: none;
+        margin-top: 0.15rem;
+      }
+      #nfc-dialog[data-busy="true"] .nfc-dialog-spinner {
+        display: inline-block;
+      }
+      #nfc-dialog-message {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.55;
+      }
+      .nfc-dialog-footer {
+        display: flex;
+        justify-content: flex-end;
+      }
+      #nfc-dialog-dismiss[hidden] {
+        display: none;
+      }
+      #nfc-dialog[data-tone="success"] {
+        border-color: rgba(34, 197, 94, 0.5);
+        box-shadow: 0 24px 48px rgba(34, 197, 94, 0.2);
+      }
+      #nfc-dialog[data-tone="error"] {
+        border-color: rgba(248, 113, 113, 0.5);
+        box-shadow: 0 24px 48px rgba(248, 113, 113, 0.2);
+      }
+      @keyframes nfc-spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
       }
       footer {
         text-align: center;
@@ -569,7 +670,36 @@
         <p>Encrypt or decrypt sensitive text with PBKDF2 + AES-GCM, then save or write it to an NFC tag.</p>
       </header>
 
-      <div id="status" role="status" aria-live="polite">Ready.</div>
+      <div
+        id="nfc-dialog-layer"
+        hidden
+      >
+        <div
+          id="nfc-dialog"
+          class="nfc-dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="nfc-dialog-title"
+          aria-describedby="nfc-dialog-message"
+          tabindex="-1"
+          data-tone="info"
+          data-busy="false"
+        >
+          <div class="nfc-dialog-header">
+            <h3 id="nfc-dialog-title">NFC operation</h3>
+            <button type="button" id="nfc-dialog-close" class="nfc-dialog-close" aria-label="Close NFC dialog">
+              &times;
+            </button>
+          </div>
+          <div class="nfc-dialog-body">
+            <div id="nfc-dialog-spinner" class="nfc-dialog-spinner" aria-hidden="true"></div>
+            <p id="nfc-dialog-message"></p>
+          </div>
+          <div class="nfc-dialog-footer">
+            <button type="button" id="nfc-dialog-dismiss" class="action-btn secondary">Close</button>
+          </div>
+        </div>
+      </div>
 
       <main>
         <div class="tab-bar" role="tablist" aria-label="Encrypt or decrypt">
@@ -666,6 +796,7 @@
                 </button>
               </div>
             </div>
+            <div id="status" role="status" aria-live="polite">Ready.</div>
             <div class="stepper" id="workflow-encrypt">
               <div class="step-toolbar">
                 <button type="button" class="action-btn secondary" data-step-prev disabled>Back</button>
@@ -752,6 +883,9 @@
                   <div class="controls">
                     <button id="copy-ciphertext-btn" type="button" class="action-btn secondary">
                       Copy JSON
+                    </button>
+                    <button id="download-ciphertext-btn" type="button" class="action-btn secondary">
+                      Download JSON
                     </button>
                     <button id="write-nfc-btn" type="button" class="action-btn secondary">
                       Write to NFC
@@ -1297,6 +1431,7 @@
           ciphertextDecrypt: requireElement("ciphertext-decrypt"),
           decryptPlaintext: requireElement("decrypt-plaintext"),
           copyCiphertextBtn: requireElement("copy-ciphertext-btn"),
+          downloadCiphertextBtn: requireElement("download-ciphertext-btn"),
           pasteCiphertextBtn: requireElement("paste-ciphertext-btn"),
           readNfcBtn: requireElement("read-nfc-btn"),
           writeNfcBtn: requireElement("write-nfc-btn"),
@@ -1316,6 +1451,13 @@
           shamirReadShareNfcBtn: requireElement("shamir-read-share-nfc-btn"),
           shamirDecryptHelper: requireElement("shamir-decrypt-helper"),
           status: requireElement("status"),
+          nfcDialogLayer: requireElement("nfc-dialog-layer"),
+          nfcDialog: requireElement("nfc-dialog"),
+          nfcDialogTitle: requireElement("nfc-dialog-title"),
+          nfcDialogMessage: requireElement("nfc-dialog-message"),
+          nfcDialogClose: requireElement("nfc-dialog-close"),
+          nfcDialogDismiss: requireElement("nfc-dialog-dismiss"),
+          nfcDialogSpinner: requireElement("nfc-dialog-spinner"),
         };
 
         const advancedState = {
@@ -1445,6 +1587,7 @@
           const { color, background } = toneStyles[tone] ?? toneStyles.info;
           elements.status.style.color = color;
           elements.status.style.background = background;
+          elements.status.hidden = false;
         }
 
         function getNfcErrorMessage(err, action = "write") {
@@ -1483,6 +1626,117 @@
           }
           return fallback;
         }
+
+        function positionStatusForPanel(activePanel) {
+          const shouldAttach = activeTab === "encrypt" || activeTab === "decrypt";
+          if (!shouldAttach) {
+            elements.status.hidden = true;
+            return;
+          }
+          const header = activePanel?.querySelector(".section-header");
+          if (header) {
+            header.insertAdjacentElement("afterend", elements.status);
+            elements.status.hidden = false;
+          }
+        }
+
+        const nfcDialogState = {
+          open: false,
+          dismissible: false,
+          autoCloseTimer: null,
+          lastFocused: null,
+        };
+
+        function clearNfcDialogAutoClose() {
+          if (nfcDialogState.autoCloseTimer !== null) {
+            clearTimeout(nfcDialogState.autoCloseTimer);
+            nfcDialogState.autoCloseTimer = null;
+          }
+        }
+
+        function showNfcDialog({
+          title,
+          message,
+          tone = "info",
+          busy = false,
+          dismissible = false,
+          autoCloseMs = null,
+        } = {}) {
+          clearNfcDialogAutoClose();
+          if (!nfcDialogState.open) {
+            const activeElement = document.activeElement;
+            nfcDialogState.lastFocused =
+              activeElement instanceof HTMLElement ? activeElement : null;
+          }
+          if (typeof title === "string") {
+            elements.nfcDialogTitle.textContent = title;
+          }
+          if (typeof message === "string") {
+            elements.nfcDialogMessage.textContent = message;
+          } else if (!elements.nfcDialogMessage.textContent) {
+            elements.nfcDialogMessage.textContent = "";
+          }
+
+          elements.nfcDialog.dataset.tone = tone;
+          elements.nfcDialog.dataset.busy = busy ? "true" : "false";
+          elements.nfcDialog.setAttribute("aria-busy", busy ? "true" : "false");
+          elements.nfcDialogSpinner.setAttribute("aria-hidden", busy ? "false" : "true");
+
+          nfcDialogState.dismissible = Boolean(dismissible);
+          elements.nfcDialogClose.hidden = !dismissible;
+          elements.nfcDialogDismiss.hidden = !dismissible;
+          elements.nfcDialogClose.tabIndex = dismissible ? 0 : -1;
+          elements.nfcDialogDismiss.tabIndex = dismissible ? 0 : -1;
+          elements.nfcDialogClose.setAttribute("aria-hidden", dismissible ? "false" : "true");
+          elements.nfcDialogDismiss.setAttribute("aria-hidden", dismissible ? "false" : "true");
+
+          elements.nfcDialogLayer.hidden = false;
+          nfcDialogState.open = true;
+          requestAnimationFrame(() => {
+            elements.nfcDialog.focus();
+          });
+
+          if (typeof autoCloseMs === "number" && autoCloseMs > 0) {
+            nfcDialogState.autoCloseTimer = window.setTimeout(() => {
+              hideNfcDialog();
+            }, autoCloseMs);
+          }
+        }
+
+        function hideNfcDialog() {
+          if (!nfcDialogState.open) return;
+          clearNfcDialogAutoClose();
+          elements.nfcDialogLayer.hidden = true;
+          nfcDialogState.open = false;
+          nfcDialogState.dismissible = false;
+          elements.nfcDialog.dataset.busy = "false";
+          elements.nfcDialog.setAttribute("aria-busy", "false");
+          elements.nfcDialogSpinner.setAttribute("aria-hidden", "true");
+          const focusTarget = nfcDialogState.lastFocused;
+          nfcDialogState.lastFocused = null;
+          if (focusTarget && typeof focusTarget.focus === "function" && focusTarget.isConnected) {
+            focusTarget.focus();
+          }
+        }
+
+        elements.nfcDialogClose.addEventListener("click", () => {
+          if (nfcDialogState.dismissible) {
+            hideNfcDialog();
+          }
+        });
+        elements.nfcDialogDismiss.addEventListener("click", () => {
+          if (nfcDialogState.dismissible) {
+            hideNfcDialog();
+          }
+        });
+        elements.nfcDialog.addEventListener("click", (event) => {
+          event.stopPropagation();
+        });
+        elements.nfcDialogLayer.addEventListener("click", (event) => {
+          if (event.target === elements.nfcDialogLayer && nfcDialogState.dismissible) {
+            hideNfcDialog();
+          }
+        });
 
         function toBase64(u8) {
           const CHUNK_SIZE = 0x8000;
@@ -1691,10 +1945,21 @@
           }
           const progressMessage = messages.progress ?? "Bring an NFC tag close to write…";
           const successMessage = messages.success ?? "Data written to NFC tag.";
+          const title = messages.title ?? "Writing to NFC";
+          const autoCloseMs =
+            typeof messages.autoCloseMs === "number" && messages.autoCloseMs > 0
+              ? messages.autoCloseMs
+              : 1800;
           if (!payload || !payload.trim()) {
             throw new Error("Nothing to write to NFC.");
           }
-          setStatus(progressMessage);
+          showNfcDialog({
+            title,
+            message: progressMessage,
+            tone: "info",
+            busy: true,
+            dismissible: false,
+          });
           const ndef = new NDEFReader();
           const data = encodeUtf8(payload);
           try {
@@ -1708,13 +1973,28 @@
               ],
             });
           } catch (err) {
-            const error = new Error(getNfcErrorMessage(err, "write"));
+            const friendly = getNfcErrorMessage(err, "write");
+            showNfcDialog({
+              title,
+              message: friendly,
+              tone: "error",
+              busy: false,
+              dismissible: true,
+            });
+            const error = new Error(friendly);
             if (err && typeof err === "object") {
               error.cause = err;
             }
             throw error;
           }
-          setStatus(successMessage, "success");
+          showNfcDialog({
+            title,
+            message: successMessage,
+            tone: "success",
+            busy: false,
+            dismissible: true,
+            autoCloseMs,
+          });
         }
 
         async function readJsonRecordFromNfc(messages = {}) {
@@ -1722,7 +2002,19 @@
             throw new Error("Web NFC is not supported on this device.");
           }
           const progressMessage = messages.progress ?? "Bring an NFC tag close to read…";
-          setStatus(progressMessage);
+          const successMessage = messages.success ?? "Data read from NFC tag.";
+          const title = messages.title ?? "Reading from NFC";
+          const autoCloseMs =
+            typeof messages.autoCloseMs === "number" && messages.autoCloseMs > 0
+              ? messages.autoCloseMs
+              : 1800;
+          showNfcDialog({
+            title,
+            message: progressMessage,
+            tone: "info",
+            busy: true,
+            dismissible: false,
+          });
           const ndef = new NDEFReader();
           const readPromise = new Promise((resolve, reject) => {
             const onReading = (event) => {
@@ -1749,9 +2041,26 @@
           });
           try {
             await ndef.scan();
-            return await readPromise;
+            const payload = await readPromise;
+            showNfcDialog({
+              title,
+              message: successMessage,
+              tone: "success",
+              busy: false,
+              dismissible: true,
+              autoCloseMs,
+            });
+            return payload;
           } catch (err) {
-            const error = new Error(getNfcErrorMessage(err, "read"));
+            const friendly = getNfcErrorMessage(err, "read");
+            showNfcDialog({
+              title,
+              message: friendly,
+              tone: "error",
+              busy: false,
+              dismissible: true,
+            });
+            const error = new Error(friendly);
             if (err && typeof err === "object") {
               error.cause = err;
             }
@@ -2140,6 +2449,8 @@
               button.focus();
             }
           });
+
+          positionStatusForPanel(panel);
         }
 
         tabButtons.forEach((button, index) => {
@@ -2190,7 +2501,13 @@
         });
 
         document.addEventListener("keydown", (event) => {
-          if (event.key === "Escape" && settingsPanelOpen) {
+          if (event.key !== "Escape") return;
+          if (nfcDialogState.open && nfcDialogState.dismissible) {
+            event.preventDefault();
+            hideNfcDialog();
+            return;
+          }
+          if (settingsPanelOpen) {
             setSettingsPanelVisible(false);
           }
         });
@@ -2231,6 +2548,18 @@
           const shareData = advancedState.lastShares?.shares?.[index];
           if (!shareData) return;
           const action = button.dataset.shareAction;
+          if (action === "nfc") {
+            try {
+              await writeJsonRecordToNfc(shareData.text, {
+                title: `Write key ${shareData.x} to NFC`,
+                progress: `Bring an NFC tag close to write key ${shareData.x}…`,
+                success: `Key ${shareData.x} written to NFC.`,
+              });
+            } catch (err) {
+              console.error(err);
+            }
+            return;
+          }
           try {
             if (action === "copy") {
               await navigator.clipboard.writeText(shareData.text);
@@ -2241,11 +2570,6 @@
                 `recoveryware-key-${shareData.x}-of-${advancedState.lastShares.total}.json`,
               );
               setStatus(`Key ${shareData.x} downloaded.`, "success");
-            } else if (action === "nfc") {
-              await writeJsonRecordToNfc(shareData.text, {
-                progress: `Bring an NFC tag close to write key ${shareData.x}…`,
-                success: `Key ${shareData.x} written to NFC.`,
-              });
             }
           } catch (err) {
             console.error(err);
@@ -2318,18 +2642,18 @@
             setStatus("Web NFC not supported on this device.", "error");
             return;
           }
+          let payload;
           try {
-            const payload = await readJsonRecordFromNfc({
+            payload = await readJsonRecordFromNfc({
+              title: "Read split key from NFC",
               progress: "Bring an NFC tag close to read a key…",
+              success: "Key JSON read from NFC tag.",
             });
-            await addShareFromString(payload, "NFC");
           } catch (err) {
             console.error(err);
-            setStatus(
-              err instanceof Error ? err.message : "Failed to read key from NFC.",
-              "error",
-            );
+            return;
           }
+          await addShareFromString(payload, "NFC");
         });
 
         elements.shamirCollectedShares.addEventListener("click", (event) => {
@@ -2437,12 +2761,12 @@
           }
           try {
             await writeJsonRecordToNfc(blobJson, {
+              title: "Write encrypted blob to NFC",
               progress: "Bring an NFC tag close to write…",
               success: "Encrypted blob written to NFC tag.",
             });
           } catch (err) {
             console.error(err);
-            setStatus(err instanceof Error ? err.message : "Failed to write to NFC.", "error");
           }
         }
 
@@ -2458,6 +2782,21 @@
           } catch (err) {
             console.error(err);
             setStatus("Clipboard write failed. Copy manually.", "error");
+          }
+        });
+
+        elements.downloadCiphertextBtn.addEventListener("click", () => {
+          const data = elements.ciphertextEncrypt.value.trim();
+          if (!data) {
+            setStatus("No encrypted data to download.", "error");
+            return;
+          }
+          try {
+            downloadAsFile(data, "recoveryware-encrypted.json");
+            setStatus("Encrypted blob downloaded.", "success");
+          } catch (err) {
+            console.error(err);
+            setStatus("Download failed. Copy manually.", "error");
           }
         });
 
@@ -2483,18 +2822,20 @@
             setStatus("Web NFC not supported on this device.", "error");
             return;
           }
+          let payload;
           try {
-            const payload = await readJsonRecordFromNfc({
+            payload = await readJsonRecordFromNfc({
+              title: "Read encrypted blob from NFC",
               progress: "Bring an NFC tag close to read…",
+              success: "Encrypted blob loaded from NFC tag.",
             });
-            setCiphertext(payload);
-            setTab("decrypt");
-            workflows.decrypt.setStep(1, { force: true });
-            setStatus("Encrypted blob loaded from NFC tag.", "success");
           } catch (err) {
             console.error(err);
-            setStatus(err instanceof Error ? err.message : "Failed to read from NFC.", "error");
+            return;
           }
+          setCiphertext(payload);
+          setTab("decrypt");
+          workflows.decrypt.setStep(1, { force: true });
         }
 
         elements.writeNfcBtn.addEventListener("click", handleWriteNfc);
