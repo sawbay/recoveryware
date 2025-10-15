@@ -569,6 +569,8 @@
         <p>Encrypt or decrypt sensitive text with PBKDF2 + AES-GCM, then save or write it to an NFC tag.</p>
       </header>
 
+      <div id="status" role="status" aria-live="polite">Ready.</div>
+
       <main>
         <div class="tab-bar" role="tablist" aria-label="Encrypt or decrypt">
           <button
@@ -970,8 +972,6 @@
           </section>
         </div>
       </main>
-
-      <div id="status" role="status" aria-live="polite">Ready.</div>
 
       <footer></footer>
     </div>
@@ -1447,6 +1447,43 @@
           elements.status.style.background = background;
         }
 
+        function getNfcErrorMessage(err, action = "write") {
+          const fallback =
+            action === "read"
+              ? "Unable to read from NFC tag. Try again."
+              : "Unable to write to NFC tag. Try again.";
+          if (!err) return fallback;
+          const name = typeof err === "object" && err && "name" in err ? String(err.name) : "";
+          if (name === "NotAllowedError") {
+            return "Browser denied NFC access. Allow NFC permissions and try again.";
+          }
+          if (name === "AbortError") {
+            return action === "read"
+              ? "NFC read cancelled. Keep the tag steady and try again."
+              : "NFC write cancelled. Keep the tag steady and try again.";
+          }
+          if (name === "NotSupportedError") {
+            return "This device does not support Web NFC.";
+          }
+          if (name === "SecurityError") {
+            return "Web NFC requires a secure context (HTTPS).";
+          }
+          const message =
+            typeof err === "object" && err && "message" in err && typeof err.message === "string"
+              ? err.message.trim()
+              : "";
+          if (message) {
+            const cleaned = message.replace(/errror/gi, "error").replace(/: null\b/gi, "").trim();
+            if (/IO error/i.test(cleaned)) {
+              return action === "read"
+                ? "NFC tag reported an I/O error while reading. Reposition or try a different tag."
+                : "NFC tag reported an I/O error while writing. Reposition or try a different tag.";
+            }
+            return cleaned;
+          }
+          return fallback;
+        }
+
         function toBase64(u8) {
           const CHUNK_SIZE = 0x8000;
           let binary = "";
@@ -1660,15 +1697,23 @@
           setStatus(progressMessage);
           const ndef = new NDEFReader();
           const data = encodeUtf8(payload);
-          await ndef.write({
-            records: [
-              {
-                recordType: "mime",
-                mediaType: "application/json",
-                data,
-              },
-            ],
-          });
+          try {
+            await ndef.write({
+              records: [
+                {
+                  recordType: "mime",
+                  mediaType: "application/json",
+                  data,
+                },
+              ],
+            });
+          } catch (err) {
+            const error = new Error(getNfcErrorMessage(err, "write"));
+            if (err && typeof err === "object") {
+              error.cause = err;
+            }
+            throw error;
+          }
           setStatus(successMessage, "success");
         }
 
@@ -1702,8 +1747,16 @@
             ndef.addEventListener("reading", onReading, { once: true });
             ndef.addEventListener("readingerror", onError, { once: true });
           });
-          await ndef.scan();
-          return await readPromise;
+          try {
+            await ndef.scan();
+            return await readPromise;
+          } catch (err) {
+            const error = new Error(getNfcErrorMessage(err, "read"));
+            if (err && typeof err === "object") {
+              error.cause = err;
+            }
+            throw error;
+          }
         }
 
         async function generateSharesForCiphertext(blobJson) {
