@@ -207,11 +207,17 @@
       .settings-layer[hidden] {
         display: none !important;
       }
+      .settings-fields[hidden],
+      #advanced-summary[hidden],
+      #advanced-description[hidden] {
+        display: none !important;
+      }
       .advanced-settings {
         position: fixed;
         display: grid;
         gap: 0.75rem;
         min-width: 240px;
+        min-height: 230px;
         max-width: min(320px, 90vw);
         padding: 1rem 1.1rem 1.1rem;
         border-radius: 16px;
@@ -236,6 +242,13 @@
         border-top: 1px solid rgba(59, 130, 246, 0.32);
         box-shadow: -3px -3px 12px rgba(15, 23, 42, 0.4);
       }
+      .advanced-settings-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.6rem;
+        align-items: center;
+        margin-bottom: 0.8rem;
+      }
       .advanced-settings h3 {
         margin: 0;
         font-size: 1rem;
@@ -246,11 +259,6 @@
         margin: 0;
         color: rgba(148, 163, 184, 0.85);
         font-size: 0.85rem;
-      }
-      .settings-toggle {
-        display: flex;
-        gap: 0.6rem;
-        align-items: center;
       }
       .advanced-settings .toggle-btn {
         border: 1px solid rgba(99, 102, 241, 0.4);
@@ -746,13 +754,15 @@
             aria-labelledby="advanced-settings-title"
             tabindex="-1"
           >
-            <h3 id="advanced-settings-title">Advanced mode</h3>
-            <div class="settings-toggle">
+            <div class="advanced-settings-header">
+              <h3 id="advanced-settings-title">Advanced mode</h3>
               <button type="button" id="advanced-enable" class="toggle-btn" aria-pressed="false">
-                Advanced mode off
+                OFF
               </button>
             </div>
-            <div class="settings-fields" role="group" aria-label="Shamir key split configuration">
+            <p id="advanced-description" class="settings-description">Split ciphertext into coordinated recovery keys.</p>
+            <p id="advanced-summary" class="settings-description" hidden></p>
+            <div id="advanced-settings-fields" class="settings-fields" role="group" aria-label="Shamir key split configuration" hidden>
               <label class="settings-field">
                 <span>Threshold</span>
                 <input id="advanced-threshold" type="number" min="2" max="10" value="2" />
@@ -763,8 +773,6 @@
                 <input id="advanced-total" type="number" min="2" max="10" value="3" />
               </label>
             </div>
-            <p class="settings-description">Split ciphertext into coordinated recovery keys.</p>
-            <p id="advanced-summary" class="settings-description"></p>
           </div>
         </div>
         <div class="tab-panels" id="tab-panels" data-active-tab="encrypt">
@@ -1406,8 +1414,10 @@
           advancedSettingsLayer: requireElement("advanced-settings-layer"),
           advancedSettings: requireElement("advanced-settings"),
           advancedToggle: requireElement("advanced-enable"),
+          advancedSettingsFields: requireElement("advanced-settings-fields"),
           advancedThreshold: requireElement("advanced-threshold"),
           advancedTotal: requireElement("advanced-total"),
+          advancedDescription: requireElement("advanced-description"),
           advancedSummary: requireElement("advanced-summary"),
           encryptPassphrase: requireElement("encrypt-passphrase"),
           encryptPassphraseConfirm: requireElement("encrypt-passphrase-confirm"),
@@ -1795,18 +1805,23 @@
         }
 
         function updateAdvancedSummary() {
+          const { threshold, total } = advancedState;
           if (advancedState.enabled) {
-            elements.advancedSummary.textContent = `Any ${advancedState.threshold} of ${advancedState.total} keys will unlock the ciphertext.`;
-            elements.shamirDecryptHelper.textContent = `Import any ${advancedState.threshold} of ${advancedState.total} keys to rebuild the encrypted blob automatically.`;
+            elements.advancedSettingsFields.hidden = false;
+            elements.advancedSummary.hidden = false;
+            elements.advancedSummary.textContent = `Any ${threshold} of ${total} keys will unlock the ciphertext.`;
+            elements.advancedDescription.hidden = true;
           } else {
-            elements.advancedSummary.textContent = "Advanced mode off — encryption stays a single JSON blob.";
-            elements.shamirDecryptHelper.textContent =
-              "Import any K of N keys to rebuild the encrypted blob automatically.";
+            elements.advancedSettingsFields.hidden = true;
+            elements.advancedSummary.hidden = true;
+            elements.advancedDescription.hidden = false;
+            elements.advancedSummary.textContent = "";
           }
+          elements.shamirDecryptHelper.textContent = advancedState.enabled
+            ? `Import any ${threshold} of ${total} keys to rebuild the encrypted blob automatically.`
+            : "Import any K of N keys to rebuild the encrypted blob automatically.";
           elements.advancedToggle.setAttribute("aria-pressed", advancedState.enabled ? "true" : "false");
-          elements.advancedToggle.textContent = advancedState.enabled
-            ? "Advanced mode on"
-            : "Advanced mode off";
+          elements.advancedToggle.textContent = advancedState.enabled ? "ON" : "OFF";
           elements.advancedThreshold.value = String(advancedState.threshold);
           elements.advancedTotal.value = String(advancedState.total);
           settingsButtons.forEach((button) => {
