@@ -1633,27 +1633,8 @@
 
         function openNfcToolsApp(action = "write") {
           const verb = action === "read" ? "read from" : "write to";
-          setStatus(`Opening NFC Tools to ${verb} the tag…`, "info");
-          const opened = window.open(NFC_TOOLS_SCHEME, "_blank");
-          if (!opened) {
-            window.open(NFC_TOOLS_STORE_URL, "_blank");
-            return;
-          }
-          function handleFallback() {
-            window.clearTimeout(fallbackTimer);
-            document.removeEventListener("visibilitychange", handleVisibilityChange);
-          }
-          function handleVisibilityChange() {
-            if (document.visibilityState === "hidden") {
-              handleFallback();
-            }
-          }
-          const fallbackTimer = window.setTimeout(() => {
-            document.removeEventListener("visibilitychange", handleVisibilityChange);
-            window.open(NFC_TOOLS_STORE_URL, "_blank");
-          }, 1500);
-          window.addEventListener("blur", handleFallback, { once: true });
-          document.addEventListener("visibilitychange", handleVisibilityChange, { once: true });
+          setStatus(`Opening App Store to ${verb} tags with NFC Tools…`, "info");
+          window.location.href = NFC_TOOLS_STORE_URL;
         }
 
         function maybeRedirectToNfcTools(action) {
