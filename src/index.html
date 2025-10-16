@@ -667,7 +667,7 @@
     <div class="shell">
       <header>
         <h1>Recovery Ware</h1>
-        <p>Encrypt or decrypt sensitive text with PBKDF2 + AES-GCM, then save or write it to an NFC tag.</p>
+        <p>Encrypt your seed phrase and save securely, not on paper.</p>
       </header>
 
       <div
@@ -1071,34 +1071,23 @@
             <div class="faq-content">
               <article class="faq-card">
                 <h3>What's it for?</h3>
-                <p>Encrypt sensitive text—recovery codes, seed phrases, anything private—and store the encrypted blob on an NFC tag instead of relying on vulnerable handwriting or printed copies.</p>
+                <p>Encrypt sensitive text—recovery codes, seed phrases, anything private—and save the ciphertext as JSON or onto an NFC tag.</p>
               </article>
               <article class="faq-card">
-                <h3>How should I use it?</h3>
-                <p>
-                  Open Recovery Ware in a private/incognito tab, enable airplane mode, finish your encrypt or decrypt
-                  task, copy the result, then close the tab. Nothing persists after the window closes.
-                </p>
+                <h3>How do I run it safely?</h3>
+                <p>Open in a private window, enable airplane mode, finish your task, copy the result, and close the tab.</p>
               </article>
               <article class="faq-card">
-                <h3>Is anything stored or sent?</h3>
-                <p>
-                  No. Every operation happens in your browser memory only—no network calls, no local storage.
-                </p>
+                <h3>Do you keep my data?</h3>
+                <p>No. Everything stays in browser memory—no network calls or local storage.</p>
               </article>
               <article class="faq-card">
-                <h3>How can I verify it?</h3>
-                <p>
-                  Use “View Source” or your dev tools to inspect the single HTML file. What you see there is exactly
-                  what runs.
-                </p>
+                <h3>Can I audit it?</h3>
+                <p>Yes. Use “View Source” or dev tools to inspect this single HTML file; what you see is all that runs.</p>
               </article>
               <article class="faq-card">
-                <h3>How do I write to NFC tags?</h3>
-                <p>
-                  Web NFC works today only on Android in supported Chromium browsers (Chrome, Edge, or equivalents).
-                  iPhone users should copy the encrypted JSON and write it with <a href="https://apps.apple.com/en/app/nfc-tools/id1252962749" target="_blank" rel="noreferrer">NFC Tools</a>.
-                </p>
+                <h3>How do I write to NFC?</h3>
+                <p>Android: Web NFC in Chrome/Edge. iPhone: copy the JSON into <a href="https://apps.apple.com/en/app/nfc-tools/id1252962749" target="_blank" rel="noreferrer">NFC Tools</a>, enable airplane mode, write the tag, then delete the app to clear cached data.</p>
               </article>
             </div>
           </section>
