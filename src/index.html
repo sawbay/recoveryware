@@ -1471,6 +1471,12 @@
         };
 
         const hasNfc = "NDEFReader" in window;
+        const userAgent = navigator.userAgent ?? "";
+        const isSafari =
+          /Safari/.test(userAgent) && !/Chrome|CriOS|Android|Edg\//.test(userAgent);
+        const useNfcToolsRedirect = isSafari && !hasNfc;
+        const NFC_TOOLS_SCHEME = "nfc-tools://";
+        const NFC_TOOLS_STORE_URL = "https://apps.apple.com/en/app/nfc-tools/id1252962749";
 
         const workflows = {
           encrypt: initWorkflow("workflow-encrypt", {
@@ -1623,6 +1629,37 @@
             return cleaned;
           }
           return fallback;
+        }
+
+        function openNfcToolsApp(action = "write") {
+          const verb = action === "read" ? "read from" : "write to";
+          setStatus(`Opening NFC Tools to ${verb} the tag…`, "info");
+          const opened = window.open(NFC_TOOLS_SCHEME, "_blank");
+          if (!opened) {
+            window.open(NFC_TOOLS_STORE_URL, "_blank");
+            return;
+          }
+          function handleFallback() {
+            window.clearTimeout(fallbackTimer);
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+          }
+          function handleVisibilityChange() {
+            if (document.visibilityState === "hidden") {
+              handleFallback();
+            }
+          }
+          const fallbackTimer = window.setTimeout(() => {
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+            window.open(NFC_TOOLS_STORE_URL, "_blank");
+          }, 1500);
+          window.addEventListener("blur", handleFallback, { once: true });
+          document.addEventListener("visibilitychange", handleVisibilityChange, { once: true });
+        }
+
+        function maybeRedirectToNfcTools(action) {
+          if (!useNfcToolsRedirect) return false;
+          openNfcToolsApp(action);
+          return true;
         }
 
         function positionStatusForPanel(activePanel) {
@@ -1938,6 +1975,9 @@
         }
 
         async function writeJsonRecordToNfc(payload, messages = {}) {
+          if (maybeRedirectToNfcTools("write")) {
+            return;
+          }
           if (!hasNfc) {
             throw new Error("Web NFC is not supported on this device.");
           }
@@ -2547,6 +2587,7 @@
           if (!shareData) return;
           const action = button.dataset.shareAction;
           if (action === "nfc") {
+            if (maybeRedirectToNfcTools("write")) return;
             try {
               await writeJsonRecordToNfc(shareData.text, {
                 title: `Write key ${shareData.x} to NFC`,
@@ -2636,6 +2677,7 @@
             setStatus("Enable advanced mode to import keys.", "error");
             return;
           }
+          if (maybeRedirectToNfcTools("read")) return;
           if (!hasNfc) {
             setStatus("Web NFC not supported on this device.", "error");
             return;
@@ -2748,6 +2790,7 @@
         }
 
         async function handleWriteNfc() {
+          if (maybeRedirectToNfcTools("write")) return;
           if (!hasNfc) {
             setStatus("Web NFC not supported on this device.", "error");
             return;
@@ -2816,6 +2859,7 @@
         });
 
         async function handleReadNfc() {
+          if (maybeRedirectToNfcTools("read")) return;
           if (!hasNfc) {
             setStatus("Web NFC not supported on this device.", "error");
             return;
@@ -2840,13 +2884,22 @@
         elements.readNfcBtn.addEventListener("click", handleReadNfc);
 
         if (!hasNfc) {
-          elements.writeNfcBtn.disabled = true;
-          elements.writeNfcBtn.title = "Web NFC is only available on supported Android browsers.";
-          elements.readNfcBtn.disabled = true;
-          elements.readNfcBtn.title = "Web NFC is only available on supported Android browsers.";
-          elements.shamirReadShareNfcBtn.disabled = true;
-          elements.shamirReadShareNfcBtn.title =
-            "Web NFC is only available on supported Android browsers.";
+          if (useNfcToolsRedirect) {
+            elements.writeNfcBtn.disabled = false;
+            elements.writeNfcBtn.title = "Opens NFC Tools to write tags.";
+            elements.readNfcBtn.disabled = false;
+            elements.readNfcBtn.title = "Opens NFC Tools to read tags.";
+            elements.shamirReadShareNfcBtn.disabled = false;
+            elements.shamirReadShareNfcBtn.title = "Opens NFC Tools to read tags.";
+          } else {
+            elements.writeNfcBtn.disabled = true;
+            elements.writeNfcBtn.title = "Web NFC is only available on supported Android browsers.";
+            elements.readNfcBtn.disabled = true;
+            elements.readNfcBtn.title = "Web NFC is only available on supported Android browsers.";
+            elements.shamirReadShareNfcBtn.disabled = true;
+            elements.shamirReadShareNfcBtn.title =
+              "Web NFC is only available on supported Android browsers.";
+          }
         }
 
         setStatus("Ready.");
