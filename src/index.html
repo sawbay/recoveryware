@@ -207,6 +207,11 @@
       .settings-layer[hidden] {
         display: none !important;
       }
+      .settings-fields[hidden],
+      #advanced-summary[hidden],
+      #advanced-description[hidden] {
+        display: none !important;
+      }
       .advanced-settings {
         position: fixed;
         display: grid;
@@ -223,6 +228,9 @@
         pointer-events: auto;
         --pointer-offset: 50%;
       }
+      .advanced-settings--expanded {
+        min-height: 230px;
+      }
       .advanced-settings::before {
         content: "";
         position: absolute;
@@ -236,6 +244,13 @@
         border-top: 1px solid rgba(59, 130, 246, 0.32);
         box-shadow: -3px -3px 12px rgba(15, 23, 42, 0.4);
       }
+      .advanced-settings-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.6rem;
+        align-items: center;
+        margin-bottom: 0.8rem;
+      }
       .advanced-settings h3 {
         margin: 0;
         font-size: 1rem;
@@ -246,11 +261,6 @@
         margin: 0;
         color: rgba(148, 163, 184, 0.85);
         font-size: 0.85rem;
-      }
-      .settings-toggle {
-        display: flex;
-        gap: 0.6rem;
-        align-items: center;
       }
       .advanced-settings .toggle-btn {
         border: 1px solid rgba(99, 102, 241, 0.4);
@@ -667,7 +677,7 @@
     <div class="shell">
       <header>
         <h1>Recovery Ware</h1>
-        <p>Encrypt or decrypt sensitive text with PBKDF2 + AES-GCM, then save or write it to an NFC tag.</p>
+        <p>Encrypt your seed phrase and save securely, not on paper.</p>
       </header>
 
       <div
@@ -746,13 +756,15 @@
             aria-labelledby="advanced-settings-title"
             tabindex="-1"
           >
-            <h3 id="advanced-settings-title">Advanced mode</h3>
-            <div class="settings-toggle">
+            <div class="advanced-settings-header">
+              <h3 id="advanced-settings-title">Advanced mode</h3>
               <button type="button" id="advanced-enable" class="toggle-btn" aria-pressed="false">
-                Advanced mode off
+                OFF
               </button>
             </div>
-            <div class="settings-fields" role="group" aria-label="Shamir key split configuration">
+            <p id="advanced-description" class="settings-description">Split ciphertext into coordinated recovery keys.</p>
+            <p id="advanced-summary" class="settings-description" hidden></p>
+            <div id="advanced-settings-fields" class="settings-fields" role="group" aria-label="Shamir key split configuration" hidden>
               <label class="settings-field">
                 <span>Threshold</span>
                 <input id="advanced-threshold" type="number" min="2" max="10" value="2" />
@@ -763,8 +775,6 @@
                 <input id="advanced-total" type="number" min="2" max="10" value="3" />
               </label>
             </div>
-            <p class="settings-description">Split ciphertext into coordinated recovery keys.</p>
-            <p id="advanced-summary" class="settings-description"></p>
           </div>
         </div>
         <div class="tab-panels" id="tab-panels" data-active-tab="encrypt">
@@ -882,7 +892,10 @@
                   </label>
                   <div class="controls">
                     <button id="copy-ciphertext-btn" type="button" class="action-btn secondary">
-                      Copy JSON
+                      Copy
+                    </button>
+                    <button id="download-ciphertext-btn" type="button" class="action-btn secondary">
+                      Download
                     </button>
                     <button id="download-ciphertext-btn" type="button" class="action-btn secondary">
                       Download JSON
@@ -1014,9 +1027,7 @@
                     ></textarea>
                   </label>
                   <div class="controls">
-                    <button id="paste-ciphertext-btn" type="button" class="action-btn secondary">
-                      Paste from clipboard
-                    </button>
+                    <button id="paste-ciphertext-btn" type="button" class="action-btn secondary">Paste</button>
                     <button id="read-nfc-btn" type="button" class="action-btn secondary">
                       Read from NFC
                     </button>
@@ -1073,34 +1084,23 @@
             <div class="faq-content">
               <article class="faq-card">
                 <h3>What's it for?</h3>
-                <p>Encrypt sensitive text—recovery codes, seed phrases, anything private—and store the encrypted blob on an NFC tag instead of relying on vulnerable handwriting or printed copies.</p>
+                <p>Encrypt sensitive text—recovery codes, seed phrases, anything private—and save the ciphertext as JSON or onto an NFC tag.</p>
               </article>
               <article class="faq-card">
-                <h3>How should I use it?</h3>
-                <p>
-                  Open Recovery Ware in a private/incognito tab, enable airplane mode, finish your encrypt or decrypt
-                  task, copy the result, then close the tab. Nothing persists after the window closes.
-                </p>
+                <h3>How do I run it safely?</h3>
+                <p>Open in a private window, enable airplane mode, finish your task, copy the result, and close the tab.</p>
               </article>
               <article class="faq-card">
-                <h3>Is anything stored or sent?</h3>
-                <p>
-                  No. Every operation happens in your browser memory only—no network calls, no local storage.
-                </p>
+                <h3>Do you keep my data?</h3>
+                <p>No. Everything stays in browser memory—no network calls or local storage.</p>
               </article>
               <article class="faq-card">
-                <h3>How can I verify it?</h3>
-                <p>
-                  Use “View Source” or your dev tools to inspect the single HTML file. What you see there is exactly
-                  what runs.
-                </p>
+                <h3>Can I audit it?</h3>
+                <p>Yes. Use “View Source” or dev tools to inspect this single HTML file; what you see is all that runs.</p>
               </article>
               <article class="faq-card">
-                <h3>How do I write to NFC tags?</h3>
-                <p>
-                  Web NFC works today only on Android in supported Chromium browsers (Chrome, Edge, or equivalents).
-                  iPhone users should copy the encrypted JSON and write it with <a href="https://apps.apple.com/en/app/nfc-tools/id1252962749" target="_blank" rel="noreferrer">NFC Tools</a>.
-                </p>
+                <h3>How do I write to NFC?</h3>
+                <p>Android: Web NFC in Chrome/Edge. iPhone: copy the JSON into <a href="https://apps.apple.com/en/app/nfc-tools/id1252962749" target="_blank" rel="noreferrer">NFC Tools</a>, enable airplane mode, write the tag, then delete the app to clear cached data.</p>
               </article>
             </div>
           </section>
@@ -1419,8 +1419,10 @@
           advancedSettingsLayer: requireElement("advanced-settings-layer"),
           advancedSettings: requireElement("advanced-settings"),
           advancedToggle: requireElement("advanced-enable"),
+          advancedSettingsFields: requireElement("advanced-settings-fields"),
           advancedThreshold: requireElement("advanced-threshold"),
           advancedTotal: requireElement("advanced-total"),
+          advancedDescription: requireElement("advanced-description"),
           advancedSummary: requireElement("advanced-summary"),
           encryptPassphrase: requireElement("encrypt-passphrase"),
           encryptPassphraseConfirm: requireElement("encrypt-passphrase-confirm"),
@@ -1473,6 +1475,12 @@
         };
 
         const hasNfc = "NDEFReader" in window;
+        const userAgent = navigator.userAgent ?? "";
+        const isSafari =
+          /Safari/.test(userAgent) && !/Chrome|CriOS|Android|Edg\//.test(userAgent);
+        const useNfcToolsRedirect = isSafari && !hasNfc;
+        const NFC_TOOLS_SCHEME = "nfc-tools://";
+        const NFC_TOOLS_STORE_URL = "https://apps.apple.com/en/app/nfc-tools/id1252962749";
 
         const workflows = {
           encrypt: initWorkflow("workflow-encrypt", {
@@ -1625,6 +1633,18 @@
             return cleaned;
           }
           return fallback;
+        }
+
+        function openNfcToolsApp(action = "write") {
+          const verb = action === "read" ? "read from" : "write to";
+          setStatus(`Opening App Store to ${verb} tags with NFC Tools…`, "info");
+          window.location.href = NFC_TOOLS_STORE_URL;
+        }
+
+        function maybeRedirectToNfcTools(action) {
+          if (!useNfcToolsRedirect) return false;
+          openNfcToolsApp(action);
+          return true;
         }
 
         function positionStatusForPanel(activePanel) {
@@ -1790,18 +1810,25 @@
         }
 
         function updateAdvancedSummary() {
+          const { threshold, total } = advancedState;
           if (advancedState.enabled) {
-            elements.advancedSummary.textContent = `Any ${advancedState.threshold} of ${advancedState.total} keys will unlock the ciphertext.`;
-            elements.shamirDecryptHelper.textContent = `Import any ${advancedState.threshold} of ${advancedState.total} keys to rebuild the encrypted blob automatically.`;
+            elements.advancedSettings.classList.add("advanced-settings--expanded");
+            elements.advancedSettingsFields.hidden = false;
+            elements.advancedSummary.hidden = false;
+            elements.advancedSummary.textContent = `Any ${threshold} of ${total} keys will unlock the ciphertext.`;
+            elements.advancedDescription.hidden = true;
           } else {
-            elements.advancedSummary.textContent = "Advanced mode off — encryption stays a single JSON blob.";
-            elements.shamirDecryptHelper.textContent =
-              "Import any K of N keys to rebuild the encrypted blob automatically.";
+            elements.advancedSettings.classList.remove("advanced-settings--expanded");
+            elements.advancedSettingsFields.hidden = true;
+            elements.advancedSummary.hidden = true;
+            elements.advancedDescription.hidden = false;
+            elements.advancedSummary.textContent = "";
           }
+          elements.shamirDecryptHelper.textContent = advancedState.enabled
+            ? `Import any ${threshold} of ${total} keys to rebuild the encrypted blob automatically.`
+            : "Import any K of N keys to rebuild the encrypted blob automatically.";
           elements.advancedToggle.setAttribute("aria-pressed", advancedState.enabled ? "true" : "false");
-          elements.advancedToggle.textContent = advancedState.enabled
-            ? "Advanced mode on"
-            : "Advanced mode off";
+          elements.advancedToggle.textContent = advancedState.enabled ? "ON" : "OFF";
           elements.advancedThreshold.value = String(advancedState.threshold);
           elements.advancedTotal.value = String(advancedState.total);
           settingsButtons.forEach((button) => {
@@ -1940,6 +1967,9 @@
         }
 
         async function writeJsonRecordToNfc(payload, messages = {}) {
+          if (maybeRedirectToNfcTools("write")) {
+            return;
+          }
           if (!hasNfc) {
             throw new Error("Web NFC is not supported on this device.");
           }
@@ -2549,6 +2579,7 @@
           if (!shareData) return;
           const action = button.dataset.shareAction;
           if (action === "nfc") {
+            if (maybeRedirectToNfcTools("write")) return;
             try {
               await writeJsonRecordToNfc(shareData.text, {
                 title: `Write key ${shareData.x} to NFC`,
@@ -2638,6 +2669,7 @@
             setStatus("Enable advanced mode to import keys.", "error");
             return;
           }
+          if (maybeRedirectToNfcTools("read")) return;
           if (!hasNfc) {
             setStatus("Web NFC not supported on this device.", "error");
             return;
@@ -2750,6 +2782,7 @@
         }
 
         async function handleWriteNfc() {
+          if (maybeRedirectToNfcTools("write")) return;
           if (!hasNfc) {
             setStatus("Web NFC not supported on this device.", "error");
             return;
@@ -2818,6 +2851,7 @@
         });
 
         async function handleReadNfc() {
+          if (maybeRedirectToNfcTools("read")) return;
           if (!hasNfc) {
             setStatus("Web NFC not supported on this device.", "error");
             return;
@@ -2842,13 +2876,22 @@
         elements.readNfcBtn.addEventListener("click", handleReadNfc);
 
         if (!hasNfc) {
-          elements.writeNfcBtn.disabled = true;
-          elements.writeNfcBtn.title = "Web NFC is only available on supported Android browsers.";
-          elements.readNfcBtn.disabled = true;
-          elements.readNfcBtn.title = "Web NFC is only available on supported Android browsers.";
-          elements.shamirReadShareNfcBtn.disabled = true;
-          elements.shamirReadShareNfcBtn.title =
-            "Web NFC is only available on supported Android browsers.";
+          if (useNfcToolsRedirect) {
+            elements.writeNfcBtn.disabled = false;
+            elements.writeNfcBtn.title = "Opens NFC Tools to write tags.";
+            elements.readNfcBtn.disabled = false;
+            elements.readNfcBtn.title = "Opens NFC Tools to read tags.";
+            elements.shamirReadShareNfcBtn.disabled = false;
+            elements.shamirReadShareNfcBtn.title = "Opens NFC Tools to read tags.";
+          } else {
+            elements.writeNfcBtn.disabled = true;
+            elements.writeNfcBtn.title = "Web NFC is only available on supported Android browsers.";
+            elements.readNfcBtn.disabled = true;
+            elements.readNfcBtn.title = "Web NFC is only available on supported Android browsers.";
+            elements.shamirReadShareNfcBtn.disabled = true;
+            elements.shamirReadShareNfcBtn.title =
+              "Web NFC is only available on supported Android browsers.";
+          }
         }
 
         setStatus("Ready.");
