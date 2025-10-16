@@ -217,7 +217,6 @@
         display: grid;
         gap: 0.75rem;
         min-width: 240px;
-        min-height: 230px;
         max-width: min(320px, 90vw);
         padding: 1rem 1.1rem 1.1rem;
         border-radius: 16px;
@@ -228,6 +227,9 @@
           0 0 0 1px rgba(59, 130, 246, 0.08);
         pointer-events: auto;
         --pointer-offset: 50%;
+      }
+      .advanced-settings--expanded {
+        min-height: 230px;
       }
       .advanced-settings::before {
         content: "";
@@ -1807,11 +1809,13 @@
         function updateAdvancedSummary() {
           const { threshold, total } = advancedState;
           if (advancedState.enabled) {
+            elements.advancedSettings.classList.add("advanced-settings--expanded");
             elements.advancedSettingsFields.hidden = false;
             elements.advancedSummary.hidden = false;
             elements.advancedSummary.textContent = `Any ${threshold} of ${total} keys will unlock the ciphertext.`;
             elements.advancedDescription.hidden = true;
           } else {
+            elements.advancedSettings.classList.remove("advanced-settings--expanded");
             elements.advancedSettingsFields.hidden = true;
             elements.advancedSummary.hidden = true;
             elements.advancedDescription.hidden = false;
