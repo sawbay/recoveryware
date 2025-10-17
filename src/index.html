@@ -148,6 +148,11 @@
         justify-content: space-between;
         gap: 0.75rem;
       }
+      .section-header-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
       .section-header-row h2 {
         margin: 0;
         flex: 1;
@@ -194,6 +199,126 @@
         box-shadow:
           0 12px 30px rgba(56, 189, 248, 0.35),
           inset 0 0 0 1px rgba(241, 245, 249, 0.35);
+      }
+      .best-practices-btn {
+        position: relative;
+        isolation: isolate;
+        border: 1px solid rgba(148, 197, 255, 0.6);
+        background: linear-gradient(135deg, rgba(30, 136, 229, 0.85), rgba(96, 165, 250, 0.85));
+        border-radius: 999px;
+        color: #f8fafc;
+        font-weight: 600;
+        padding: 0.5rem 1.45rem;
+        cursor: pointer;
+        transition: transform 0.25s ease, box-shadow 0.3s ease, filter 0.3s ease;
+        box-shadow:
+          0 10px 24px rgba(37, 99, 235, 0.35),
+          inset 0 1px 0 rgba(241, 245, 249, 0.35);
+      }
+      .best-practices-btn::before {
+        content: "";
+        position: absolute;
+        inset: -6px;
+        border-radius: inherit;
+        background: radial-gradient(circle at 30% 20%, rgba(125, 211, 252, 0.65), transparent 60%),
+          radial-gradient(circle at 75% 80%, rgba(129, 140, 248, 0.75), transparent 65%);
+        opacity: 0.8;
+        filter: blur(14px);
+        z-index: -1;
+        transition: opacity 0.3s ease, filter 0.3s ease;
+      }
+      .best-practices-btn:hover,
+      .best-practices-btn:focus-visible {
+        outline: none;
+        transform: translateY(-2px);
+        box-shadow:
+          0 18px 36px rgba(37, 99, 235, 0.45),
+          inset 0 1px 0 rgba(241, 245, 249, 0.45);
+        filter: brightness(1.05);
+      }
+      .best-practices-btn:hover::before,
+      .best-practices-btn:focus-visible::before {
+        opacity: 1;
+        filter: blur(18px);
+      }
+      .best-practices-btn:focus-visible {
+        box-shadow:
+          0 0 0 3px rgba(191, 219, 254, 0.35),
+          0 20px 40px rgba(37, 99, 235, 0.45),
+          inset 0 1px 0 rgba(241, 245, 249, 0.45);
+      }
+      .modal-layer {
+        position: fixed;
+        inset: 0;
+        z-index: 1100;
+        background: rgba(4, 6, 14, 0.68);
+        backdrop-filter: blur(16px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        pointer-events: none;
+      }
+      .modal-layer.is-open {
+        pointer-events: auto;
+      }
+      .modal-layer[hidden] {
+        display: none !important;
+      }
+      .best-practices-dialog {
+        width: min(560px, 100%);
+        max-height: min(72vh, 680px);
+        background: rgba(9, 14, 24, 0.94);
+        border-radius: 22px;
+        border: 1px solid rgba(125, 211, 252, 0.2);
+        box-shadow:
+          0 28px 60px rgba(2, 6, 23, 0.65),
+          0 8px 24px rgba(56, 189, 248, 0.22),
+          inset 0 1px 0 rgba(148, 163, 184, 0.12);
+        padding: 1.5rem clamp(1.5rem, 4vw, 2rem);
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        overflow: hidden;
+        outline: none;
+      }
+      .best-practices-dialog-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+      .best-practices-dialog-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #f8fafc;
+        letter-spacing: -0.01em;
+      }
+      .best-practices-close {
+        border: 1px solid rgba(148, 163, 184, 0.28);
+        background: rgba(15, 23, 42, 0.65);
+        color: rgba(226, 232, 240, 0.86);
+        border-radius: 999px;
+        width: 2.1rem;
+        height: 2.1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      }
+      .best-practices-close:hover,
+      .best-practices-close:focus-visible {
+        background: rgba(30, 41, 59, 0.75);
+        border-color: rgba(226, 232, 240, 0.5);
+        outline: none;
+        transform: translateY(-1px);
+      }
+      .best-practices-dialog-body {
+        overflow-y: auto;
+        padding-right: 0.25rem;
+        flex: 1 1 auto;
+        min-height: 0;
       }
       .settings-layer {
         position: fixed;
@@ -772,17 +897,6 @@
           <button
             type="button"
             class="tab-btn"
-            data-tab-target="best-practices"
-            role="tab"
-            aria-controls="tab-best-practices"
-            aria-selected="false"
-            tabindex="-1"
-          >
-            Best Practices
-          </button>
-          <button
-            type="button"
-            class="tab-btn"
             data-tab-target="faq"
             role="tab"
             aria-controls="tab-faq"
@@ -822,6 +936,59 @@
             </div>
           </div>
         </div>
+        <div
+          id="best-practices-layer"
+          class="modal-layer"
+          hidden
+        >
+          <div
+            id="best-practices-dialog"
+            class="best-practices-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="best-practices-title"
+            tabindex="-1"
+          >
+            <div class="best-practices-dialog-header">
+              <h3 id="best-practices-title">Best Practices</h3>
+              <button
+                type="button"
+                id="best-practices-close"
+                class="best-practices-close"
+                aria-label="Close best practices"
+              >
+                &times;
+              </button>
+            </div>
+            <div class="best-practices-dialog-body">
+              <div class="best-practices">
+                <article class="best-practice-card">
+                  <h3>Passphrase-Only Secrets</h3>
+                  <p>Use this path when you just need a single passphrase to encrypt your secret.</p>
+                  <ol>
+                    <li>Generate a <strong>secure random password</strong> (16+ characters) using a trusted password manager or hardware token.</li>
+                    <li>Encrypt the secret, and <strong>write the ciphertext to an NFC tag</strong>.</li>
+                    <li>Clone multiple NFC tags so you have primary and backup copies; label them physically without revealing what they protect.</li>
+                    <li>Test a clone on a clean device before storing them away to ensure the NFC export works.</li>
+                  </ol>
+                  <p class="helper-text">Keep NFC tags in separate, water-resistant sleeves and audit them every 6–12 months.</p>
+                </article>
+                <article class="best-practice-card">
+                  <h3>High-Security Secrets</h3>
+                  <p>Protect seed phrases that cannot afford a single point of failure.</p>
+                  <ol>
+                    <li>Generate a <strong>random password</strong> dedicated to the seed phrase; record it temporarily in a secure offline note.</li>
+                    <li>Encrypt the seed phrase with that password and <strong>clone multiple copies of the encrypted seed</strong>—JSON, NFC, or both.</li>
+                    <li>Enable advanced mode, set it to <strong>2 of 3 keys</strong>, and encrypt the random password to create three recovery keys.</li>
+                    <li>Store the recovery keys in separate locations: one at home, one at the office, and one with your spouse or wife.</li>
+                    <li>Document the reconstruction steps: retrieve any two keys, rebuild the password, then decrypt any stored copy of the seed phrase.</li>
+                  </ol>
+                  <p class="helper-text">Never keep two keys together; rehearse the reconstruction annually to confirm every location remains in sync.</p>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="tab-panels" id="tab-panels" data-active-tab="encrypt">
           <section
             class="panel tab-panel tab-panel--active"
@@ -834,21 +1001,31 @@
             <div class="section-header">
               <div class="section-header-row">
                 <h2>Encrypt</h2>
-                <button
-                  type="button"
-                  class="settings-btn"
-                  data-settings-trigger
-                  aria-expanded="false"
-                  aria-controls="advanced-settings"
-                  aria-pressed="false"
-                  title="Toggle advanced Shamir secret sharing settings"
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path
-                      d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm8.5-3a6.5 6.5 0 0 1-.06.86l2.11 1.65a1 1 0 0 1 .24 1.3l-2 3.46a1 1 0 0 1-1.21.45l-2.49-1a6.52 6.52 0 0 1-1.49.86l-.38 2.65a1 1 0 0 1-1 .86h-4a1 1 0 0 1-1-.86l-.38-2.65a6.52 6.52 0 0 1-1.49-.86l-2.49 1a1 1 0 0 1-1.21-.45l-2-3.46a1 1 0 0 1 .24-1.3l2.11-1.65A6.5 6.5 0 0 1 3.5 12a6.5 6.5 0 0 1 .06-.86L1.45 9.49a1 1 0 0 1-.24-1.3l2-3.46a1 1 0 0 1 1.21-.45l2.49 1a6.52 6.52 0 0 1 1.49-.86l.38-2.65A1 1 0 0 1 10 1h4a1 1 0 0 1 1 .86l.38 2.65a6.52 6.52 0 0 1 1.49.86l2.49-1a1 1 0 0 1 1.21.45l2 3.46a1 1 0 0 1-.24 1.3l-2.11 1.65c.04.28.07.57.07.87z"
-                    />
-                  </svg>
-                </button>
+                <div class="section-header-actions">
+                  <button
+                    type="button"
+                    class="best-practices-btn"
+                    data-best-practices-trigger
+                    aria-haspopup="dialog"
+                  >
+                    Best Practices
+                  </button>
+                  <button
+                    type="button"
+                    class="settings-btn"
+                    data-settings-trigger
+                    aria-expanded="false"
+                    aria-controls="advanced-settings"
+                    aria-pressed="false"
+                    title="Toggle advanced Shamir secret sharing settings"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                      <path
+                        d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm8.5-3a6.5 6.5 0 0 1-.06.86l2.11 1.65a1 1 0 0 1 .24 1.3l-2 3.46a1 1 0 0 1-1.21.45l-2.49-1a6.52 6.52 0 0 1-1.49.86l-.38 2.65a1 1 0 0 1-1 .86h-4a1 1 0 0 1-1-.86l-.38-2.65a6.52 6.52 0 0 1-1.49-.86l-2.49 1a1 1 0 0 1-1.21-.45l-2-3.46a1 1 0 0 1 .24-1.3l2.11-1.65A6.5 6.5 0 0 1 3.5 12a6.5 6.5 0 0 1 .06-.86L1.45 9.49a1 1 0 0 1-.24-1.3l2-3.46a1 1 0 0 1 1.21-.45l2.49 1a6.52 6.52 0 0 1 1.49-.86l.38-2.65A1 1 0 0 1 10 1h4a1 1 0 0 1 1 .86l.38 2.65a6.52 6.52 0 0 1 1.49.86l2.49-1a1 1 0 0 1 1.21.45l2 3.46a1 1 0 0 1-.24 1.3l-2.11 1.65c.04.28.07.57.07.87z"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
             <div id="status" role="status" aria-live="polite">Ready.</div>
@@ -986,21 +1163,31 @@
             <div class="section-header">
               <div class="section-header-row">
                 <h2>Decrypt</h2>
-                <button
-                  type="button"
-                  class="settings-btn"
-                  data-settings-trigger
-                  aria-expanded="false"
-                  aria-controls="advanced-settings"
-                  aria-pressed="false"
-                  title="Toggle advanced Shamir secret sharing settings"
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path
-                      d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm8.5-3a6.5 6.5 0 0 1-.06.86l2.11 1.65a1 1 0 0 1 .24 1.3l-2 3.46a1 1 0 0 1-1.21.45l-2.49-1a6.52 6.52 0 0 1-1.49.86l-.38 2.65a1 1 0 0 1-1 .86h-4a1 1 0 0 1-1-.86l-.38-2.65a6.52 6.52 0 0 1-1.49-.86l-2.49 1a1 1 0 0 1-1.21-.45l-2-3.46a1 1 0 0 1 .24-1.3l2.11-1.65A6.5 6.5 0 0 1 3.5 12a6.5 6.5 0 0 1 .06-.86L1.45 9.49a1 1 0 0 1-.24-1.3l2-3.46a1 1 0 0 1 1.21-.45l2.49 1a6.52 6.52 0 0 1 1.49-.86l.38-2.65A1 1 0 0 1 10 1h4a1 1 0 0 1 1 .86l.38 2.65a6.52 6.52 0 0 1 1.49.86l2.49-1a1 1 0 0 1 1.21.45l2 3.46a1 1 0 0 1-.24 1.3l-2.11 1.65c.04.28.07.57.07.87z"
-                    />
-                  </svg>
-                </button>
+                <div class="section-header-actions">
+                  <button
+                    type="button"
+                    class="best-practices-btn"
+                    data-best-practices-trigger
+                    aria-haspopup="dialog"
+                  >
+                    Best Practices
+                  </button>
+                  <button
+                    type="button"
+                    class="settings-btn"
+                    data-settings-trigger
+                    aria-expanded="false"
+                    aria-controls="advanced-settings"
+                    aria-pressed="false"
+                    title="Toggle advanced Shamir secret sharing settings"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                      <path
+                        d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm8.5-3a6.5 6.5 0 0 1-.06.86l2.11 1.65a1 1 0 0 1 .24 1.3l-2 3.46a1 1 0 0 1-1.21.45l-2.49-1a6.52 6.52 0 0 1-1.49.86l-.38 2.65a1 1 0 0 1-1 .86h-4a1 1 0 0 1-1-.86l-.38-2.65a6.52 6.52 0 0 1-1.49-.86l-2.49 1a1 1 0 0 1-1.21-.45l-2-3.46a1 1 0 0 1 .24-1.3l2.11-1.65A6.5 6.5 0 0 1 3.5 12a6.5 6.5 0 0 1 .06-.86L1.45 9.49a1 1 0 0 1-.24-1.3l2-3.46a1 1 0 0 1 1.21-.45l2.49 1a6.52 6.52 0 0 1 1.49-.86l.38-2.65A1 1 0 0 1 10 1h4a1 1 0 0 1 1 .86l.38 2.65a6.52 6.52 0 0 1 1.49.86l2.49-1a1 1 0 0 1 1.21.45l2 3.46a1 1 0 0 1-.24 1.3l-2.11 1.65c.04.28.07.57.07.87z"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
             <div class="stepper" id="workflow-decrypt">
@@ -1112,45 +1299,6 @@
                   </label>
                 </section>
               </div>
-            </div>
-          </section>
-
-          <section
-            class="panel tab-panel"
-            id="tab-best-practices"
-            data-tab="best-practices"
-            role="tabpanel"
-            aria-label="Best Practices"
-            aria-hidden="true"
-          >
-            <div class="section-header">
-              <h2>Best Practices</h2>
-              <p>Follow these patterns to keep your recoveries predictable, reproducible, and survivable.</p>
-            </div>
-            <div class="best-practices">
-              <article class="best-practice-card">
-                <h3>Passphrase-Only Secrets</h3>
-                <p>Use this path when you just need a single passphrase to encrypt your secret.</p>
-                <ol>
-                  <li>Generate a <strong>secure random password</strong> (16+ characters) using a trusted password manager or hardware token.</li>
-                  <li>Encrypt the secret, and <strong>write the ciphertext to an NFC tag</strong>.</li>
-                  <li>Clone multiple NFC tags so you have primary and backup copies; label them physically without revealing what they protect.</li>
-                  <li>Test a clone on a clean device before storing them away to ensure the NFC export works.</li>
-                </ol>
-                <p class="helper-text">Keep NFC tags in separate, water-resistant sleeves and audit them every 6–12 months.</p>
-              </article>
-              <article class="best-practice-card">
-                <h3>High-Security Secrets</h3>
-                <p>Protect seed phrases that cannot afford a single point of failure.</p>
-                <ol>
-                  <li>Generate a <strong>random password</strong> dedicated to the seed phrase; record it temporarily in a secure offline note.</li>
-                  <li>Encrypt the seed phrase with that password and <strong>clone multiple copies of the encrypted seed</strong>—JSON, NFC, or both.</li>
-                  <li>Enable advanced mode, set it to <strong>2 of 3 keys</strong>, and encrypt the random password to create three recovery keys.</li>
-                  <li>Store the recovery keys in separate locations: one at home, one at the office, and one with your spouse or wife.</li>
-                  <li>Document the reconstruction steps: retrieve any two keys, rebuild the password, then decrypt any stored copy of the seed phrase.</li>
-                </ol>
-                <p class="helper-text">Never keep two keys together; rehearse the reconstruction annually to confirm every location remains in sync.</p>
-              </article>
             </div>
           </section>
 
@@ -1502,6 +1650,9 @@
           tabPanels: requireElement("tab-panels"),
           advancedSettingsLayer: requireElement("advanced-settings-layer"),
           advancedSettings: requireElement("advanced-settings"),
+          bestPracticesLayer: requireElement("best-practices-layer"),
+          bestPracticesDialog: requireElement("best-practices-dialog"),
+          bestPracticesClose: requireElement("best-practices-close"),
           advancedToggle: requireElement("advanced-enable"),
           advancedSettingsFields: requireElement("advanced-settings-fields"),
           advancedThreshold: requireElement("advanced-threshold"),
@@ -1601,9 +1752,17 @@
         const tabButtons = Array.from(document.querySelectorAll("[data-tab-target]"));
         const tabPanels = Array.from(elements.tabPanels.querySelectorAll(".tab-panel"));
         let activeTab = elements.tabPanels.dataset.activeTab || "encrypt";
+        const bestPracticesTriggers = Array.from(
+          document.querySelectorAll("[data-best-practices-trigger]"),
+        );
         const settingsButtons = Array.from(document.querySelectorAll("[data-settings-trigger]"));
         let settingsPanelOpen = false;
         let lastSettingsTrigger = null;
+        const bestPracticesState = {
+          open: false,
+          lastTrigger: null,
+        };
+        elements.bestPracticesDialog.setAttribute("aria-hidden", "true");
 
         function positionSettingsPanel(trigger) {
           const panel = elements.advancedSettings;
@@ -1665,6 +1824,29 @@
             elements.advancedSettings.style.removeProperty("--pointer-offset");
             if (lastSettingsTrigger instanceof HTMLElement) {
               lastSettingsTrigger.focus();
+            }
+          }
+        }
+
+        function setBestPracticesVisible(visible, options = {}) {
+          bestPracticesState.open = Boolean(visible);
+          if (bestPracticesState.open && options.trigger instanceof HTMLElement) {
+            bestPracticesState.lastTrigger = options.trigger;
+          }
+          elements.bestPracticesLayer.hidden = !bestPracticesState.open;
+          elements.bestPracticesLayer.classList.toggle("is-open", bestPracticesState.open);
+          elements.bestPracticesDialog.setAttribute(
+            "aria-hidden",
+            bestPracticesState.open ? "false" : "true",
+          );
+          if (bestPracticesState.open) {
+            requestAnimationFrame(() => {
+              elements.bestPracticesDialog.focus();
+            });
+          } else {
+            const trigger = bestPracticesState.lastTrigger;
+            if (trigger instanceof HTMLElement) {
+              trigger.focus();
             }
           }
         }
@@ -2584,6 +2766,23 @@
 
         setTab(activeTab);
 
+        bestPracticesTriggers.forEach((button) => {
+          button.addEventListener("click", (event) => {
+            event.preventDefault();
+            setBestPracticesVisible(true, { trigger: button });
+          });
+        });
+
+        elements.bestPracticesClose.addEventListener("click", () => {
+          setBestPracticesVisible(false);
+        });
+
+        elements.bestPracticesLayer.addEventListener("click", (event) => {
+          if (event.target === elements.bestPracticesLayer) {
+            setBestPracticesVisible(false);
+          }
+        });
+
         settingsButtons.forEach((button) => {
           button.addEventListener("click", (event) => {
             event.preventDefault();
@@ -2619,6 +2818,11 @@
           if (nfcDialogState.open && nfcDialogState.dismissible) {
             event.preventDefault();
             hideNfcDialog();
+            return;
+          }
+          if (bestPracticesState.open) {
+            event.preventDefault();
+            setBestPracticesVisible(false);
             return;
           }
           if (settingsPanelOpen) {
